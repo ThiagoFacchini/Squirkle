@@ -1,13 +1,13 @@
 import React from 'react';
 import styles from './styles.modules.css'
 
-const Home = () => {
+const NotFound = () => {
 
     return (
         <div className={styles.container}>
-            HOME
+            NOT FOUND
         </div>
     )
 }
 
-export default Home
+export default NotFound

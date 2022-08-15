@@ -1,12 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'
+
 import styles from './styles.modules.css'
 
 const Sandbox = () => {
-    console.log(styles)
+    const navigate = useNavigate()
 
     return (
         <div className={styles.container}>
             SANDBOX
+            <div onClick={ () => navigate('/') }>
+                Back to Home
+            </div>
         </div>
     )
 }

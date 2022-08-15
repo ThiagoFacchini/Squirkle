@@ -12,6 +12,7 @@ esBuildDevServer.start(
         sourcemap: true,
         incremental: true,
         metafile: true,
+        format: 'esm',
         target: ['chrome58', 'safari11'],
         outdir: './public/dist',
         plugins: [
