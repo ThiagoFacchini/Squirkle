@@ -31598,8 +31598,8 @@ Object.assign(lookup2, {
 // views/home/index.tsx
 var import_react4 = __toESM(require_react());
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-Y7pvK2zrtAXs/client/views/home/styles.modules.css.js
-var digest = "47ed5a715750124ab2ee273ec242846ccae91ae17472aa833b3449e455fbc64d";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-49457-wyBwFIpdb9DI/client/views/home/styles.modules.css.js
+var digest = "e02a81bb49841f69eef3d68b87a8701ec92d95df5a90797f75cc21056e8f5904";
 var css = `._container_5a1r6_1 {
     background-color: salmon;
     font-size: 20px;
@@ -31628,8 +31628,8 @@ var home_default = Home;
 // views/sandbox/index.tsx
 var import_react5 = __toESM(require_react());
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-R5F8StGpaNhj/client/views/sandbox/styles.modules.css.js
-var digest2 = "0b730f471e49b69da2871bbc99ba40d67189694834d6e39b6cb40b2381df9214";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-49457-P2n02fySbMWD/client/views/sandbox/styles.modules.css.js
+var digest2 = "a8ec3b939fa8ff7c3c7519b58ffa1a8b0f483f8f63cc5fd70f47b9da471fdee6";
 var css2 = `._container_1dtej_1 {
     background-color: lime;
     font-size: 20px;
@@ -31661,8 +31661,8 @@ var sandbox_default = Sandbox;
 // views/notfound/index.tsx
 var import_react6 = __toESM(require_react());
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-pCSBxFrvP12q/client/views/notfound/styles.modules.css.js
-var digest3 = "9e05873b9111d8574dca1787c0a91a83d5c0a649200c18a60dad4d01388c473c";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-49457-rXqDvvx2uvBI/client/views/notfound/styles.modules.css.js
+var digest3 = "4862ea9a267769be86868f1b4326af487d4218d4ddece9f3aad027adfe97f9ae";
 var css3 = `._container_1du2l_1 {
     background-color: red;
     color: white;
@@ -31689,8 +31689,8 @@ var NotFound = () => {
 };
 var notfound_default = NotFound;
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-NqdjS7x9Px9y/client/styles.modules.css.js
-var digest4 = "9d2446c4bd1e101fd417f9d80553f360f407ae1956c1b422156441fa82ba4e77";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-49457-hvr3bUehE77Z/client/styles.modules.css.js
+var digest4 = "3f164f2b314c6ce12ac88fd27a5fd6196348981a9d257b1cc8587606b88cf2d6";
 var css4 = `._appContainer_159yo_1 {
     background-color: #333;
     font-size: 20px;
@@ -31819,23 +31819,21 @@ var App = () => {
       console.log("Message from server");
       console.log(data.message);
     });
-    socket.on("tick", () => {
-      console.log("tick from server");
+    socket.on("tick", (data) => {
+      console.log(`tick from server ${data.message}`);
     });
   }, [socket]);
+  console.log("rendered");
   const sendMessage = () => {
     socket.emit("client", {
       message: "Client message"
     });
   };
-  const testIcon = function() {
-    return /* @__PURE__ */ import_react7.default.createElement(test_default, null);
-  };
   return /* @__PURE__ */ import_react7.default.createElement("div", {
     className: styles_modules_css_default4.appContainer
   }, "APP.TSX username: ", userDetails.username, "authToken: ", userDetails.authToken, "Is logged: ", userDetails.isLogged, /* @__PURE__ */ import_react7.default.createElement("br", null), "tick count: ", tick, /* @__PURE__ */ import_react7.default.createElement("br", null), /* @__PURE__ */ import_react7.default.createElement("div", {
     onClick: () => updateUserDetails({ username: "xdontboot", authToken: "123098", isLogged: "true" })
-  }, "Update", testIcon(), /* @__PURE__ */ import_react7.default.createElement("img", {
+  }, "Update", /* @__PURE__ */ import_react7.default.createElement(test_default, null), /* @__PURE__ */ import_react7.default.createElement("img", {
     src: test_default2,
     alt: "my png"
   })), "Macro Debug: ", macros.debug, /* @__PURE__ */ import_react7.default.createElement("br", null), /* @__PURE__ */ import_react7.default.createElement("div", {
@@ -31861,7 +31859,7 @@ if (!rootEl)
   throw new Error("Failed to find root element");
 var root = (0, import_client.createRoot)(rootEl);
 root.render(
-  /* @__PURE__ */ import_react8.default.createElement(import_react8.default.StrictMode, null, /* @__PURE__ */ import_react8.default.createElement(RootStoreProvider, null, /* @__PURE__ */ import_react8.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react8.default.createElement(app_default, null))))
+  /* @__PURE__ */ import_react8.default.createElement(RootStoreProvider, null, /* @__PURE__ */ import_react8.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react8.default.createElement(app_default, null)))
 );
 /**
  * @license

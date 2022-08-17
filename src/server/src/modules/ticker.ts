@@ -1,25 +1,63 @@
-const subscribers = []
-const interval = 1000
+import { isEmpty } from 'lodash'
 
-let count: number = 0
-const shouldTick: boolean = true
+type SubscriptionType = {
+    id: string
+    cb: (tick: number) => void
+} 
 
-setInterval(() => {
-    console.log(`ticking => ${count}`)
-    count++
+console.log('[MODULE:TICKER]: Loaded.')
 
-    if (count > 10) {
-        clearInterval(this)
-        console.log('ticker stopped')
+// Configurations
+const dayTickAmount = 1440
+const intervalMS = 1000
+
+let ticker
+let tickCount: number = 0
+const subscribersArr: Array<SubscriptionType> = []
+
+
+function tick() {
+    (tickCount === dayTickAmount) ? tickCount = 0 : tickCount++
+
+    if (!isEmpty(subscribersArr)) {
+        for (let i =0; i < subscribersArr.length; i++) {
+            subscribersArr[i].cb(tickCount)
+        }
     }
-}, interval)
-
-
-export function tick() {
-    console.log('ticked')
 }
 
-export function subscribe() {}
+function subscribe(subscriber: SubscriptionType) {
+    console.log(`Subscribing client id: ${subscriber.id}`)
+    subscribersArr.push(subscriber)
+}
 
-export function unsubscribe() {}
+export function tickerSubscribe(subscriber: SubscriptionType) {
+    if (!isEmpty(subscribersArr)) {
+        let shouldSubscribe = true
+
+        for (let i = 0; i < subscribersArr.length; i++) {
+            if (subscribersArr[i].id === subscriber.id) {
+                shouldSubscribe = false
+                return
+            }
+        }
+
+        if (shouldSubscribe) subscribe(subscriber)
+        return
+    } 
+
+    subscribe(subscriber)
+}
+
+export function tickerUnsubscribe() {}
+
+export function tickerStart() {
+    console.log('[MODULE:TICKER]: Started.')
+    ticker = setInterval(tick, intervalMS)
+}
+
+export function tickerStop() {
+    console.log('[MODULE:TICKER]: Stopped.')
+    clearInterval(ticker)
+}
 

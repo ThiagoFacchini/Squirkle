@@ -3,7 +3,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 
-import { tick } from './modules/ticker'
+import { tickerStart, tickerSubscribe, tickerUnsubscribe } from './modules/ticker'
 
 const app = express()
 app.use(cors())
@@ -16,7 +16,8 @@ const io = new Server(server, {
     }
 })
 
-tick()
+tickerStart()
+
 
 io.on('connection', (socket) => {
     console.log(`User connect ${socket.id}`)
@@ -30,6 +31,12 @@ io.on('connection', (socket) => {
         })
         console.log('emitted')
     })
+
+    
+    tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
+        console.log('ticking to clients')
+        socket.emit('tick', { message: tickCount })
+    }})
 
 })
 

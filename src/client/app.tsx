@@ -25,23 +25,18 @@ const App = () => {
             console.log(data.message)
         })
 
-        socket.on('tick', () => {
-            console.log('tick from server')
+        socket.on('tick', (data) => {
+            console.log(`tick from server ${data.message}`)
         })
     }, [socket])
+
+    console.log('rendered')
 
 
     const sendMessage = () => {
         socket.emit('client', {
             message: 'Client message'
         })
-    }
-
-    const testIcon = function () {
-        // return `${IconTest}`
-        return (
-            <Icon />
-        )
     }
 
     return (
@@ -55,7 +50,7 @@ const App = () => {
             <br/>
             <div onClick={ () => updateUserDetails({ username: 'xdontboot', authToken: '123098', isLogged: 'true' })}>
                 Update
-               {testIcon()}
+               <Icon />
                <img src={myPng} alt='my png'/>
             </div>
         

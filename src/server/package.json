@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.7.6",
+    "@types/lodash": "^4.14.183",
     "cors": "^2.8.5",
     "esbuild": "^0.15.5",
     "esbuild-node-externals": "^1.4.1",
@@ -20,6 +21,7 @@
     "nodemon": "^2.0.19"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "socket.io": "^4.5.1"
   }
 }

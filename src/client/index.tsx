@@ -10,12 +10,20 @@ const rootEl = document.getElementById('root')
 if (!rootEl) throw new Error('Failed to find root element')
 const root = createRoot(rootEl)
 
+// root.render(
+//     <React.StrictMode>
+//         <RootStoreProvider>
+//             <BrowserRouter>
+//                 <App/>
+//             </BrowserRouter>
+//         </RootStoreProvider>
+//     </React.StrictMode>
+// )
+
 root.render(
-    <React.StrictMode>
-        <RootStoreProvider>
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
-        </RootStoreProvider>
-    </React.StrictMode>
+    <RootStoreProvider>
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    </RootStoreProvider>
 )
