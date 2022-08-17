@@ -5,27 +5,28 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --trace-warnings ./utils/devServer.js"
+    "start": "node --trace-warnings ./utils/devServer.mjs"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/lodash": "^4.14.182",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/socket.io-client": "^3.0.0",
     "autoprefixer": "^10.4.8",
     "esbuild": "^0.15.0",
     "esbuild-copy-files-plugin": "^1.1.0",
     "esbuild-css-modules-plugin": "^2.5.1",
     "esbuild-dev-server": "^0.3.0",
     "esbuild-plugin-postcss": "0.0.2",
+    "esbuild-plugin-svgr": "^1.0.1",
     "express": "^4.18.1",
     "postcss-import": "^14.1.0",
     "postcss-nesting": "^10.1.10"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.182",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "@types/socket.io-client": "^3.0.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

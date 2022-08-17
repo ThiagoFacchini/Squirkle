@@ -1,8 +1,12 @@
-const {build} = require("esbuild")
-const esBuildDevServer = require("esbuild-dev-server")
-const cssModulesPlugin = require("esbuild-css-modules-plugin")
-const postCssPlugin = require("esbuild-plugin-postcss")
-const postCssConfig = require("./postcss.config")
+import { build } from "esbuild"
+import esBuildDevServer from "esbuild-dev-server"
+import cssModulesPlugin from "esbuild-css-modules-plugin"
+
+import postCssPlugin from "esbuild-plugin-postcss"
+import copyFilePlugin from 'esbuild-copy-files-plugin'
+import svgPlugin from 'esbuild-plugin-svgr'
+
+import postCssConfig from "./postcssConfig.mjs"
 
 esBuildDevServer.start(
     build({
@@ -13,11 +17,18 @@ esBuildDevServer.start(
         incremental: true,
         metafile: true,
         format: 'esm',
+        loader: { '.png' : "dataurl" },
         target: ['chrome58', 'safari11'],
         outdir: '../../public/client/dist',
         plugins: [
             cssModulesPlugin(),
-            postCssPlugin.default(postCssConfig)
+            postCssPlugin.default(postCssConfig),
+            copyFilePlugin({
+                source: ['../../public/client/reset.css'],
+                target: ['../../public/client/dist'],
+                copyWithFolder: false
+            }),
+            svgPlugin()
         ]
     }),
     // To run the dev server a permission change is necessary:
