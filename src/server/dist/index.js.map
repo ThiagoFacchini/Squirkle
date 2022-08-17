@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.ts"],
+  "sourcesContent": ["const express = require('express')\nconst http = require('http')\nconst { Server } = require('socket.io')\nconst cors = require('cors')\n\nconst app = express()\napp.use(cors())\nconst server = http.createServer(app)\n\nconst io = new Server(server, {\n    cors: {\n        origin: \"http://localhost:8080\",\n        methods: [\"GET\", \"POST\"]\n    }\n})\n\nio.on('connection', (socket) => {\n    console.log(`User connect ${socket.id}`)\n\n    socket.on('client', (data) => {\n        console.log('Message received - topic: client - message:')\n        console.log(data)\n        console.log('emitting...')\n        socket.emit('dada', {\n            message: 'Server message'\n        })\n        console.log('emitted')\n    })\n\n})\n\nserver.listen(3000, () => {\n    console.log('[SERVER]: - Running at port 3000')\n})\n"],
+  "mappings": ";AAAA,IAAM,UAAU,QAAQ;AACxB,IAAM,OAAO,QAAQ;AACrB,IAAM,EAAE,OAAO,IAAI,QAAQ;AAC3B,IAAM,OAAO,QAAQ;AAErB,IAAM,MAAM,QAAQ;AACpB,IAAI,IAAI,KAAK,CAAC;AACd,IAAM,SAAS,KAAK,aAAa,GAAG;AAEpC,IAAM,KAAK,IAAI,OAAO,QAAQ;AAAA,EAC1B,MAAM;AAAA,IACF,QAAQ;AAAA,IACR,SAAS,CAAC,OAAO,MAAM;AAAA,EAC3B;AACJ,CAAC;AAED,GAAG,GAAG,cAAc,CAAC,WAAW;AAC5B,UAAQ,IAAI,gBAAgB,OAAO,IAAI;AAEvC,SAAO,GAAG,UAAU,CAAC,SAAS;AAC1B,YAAQ,IAAI,6CAA6C;AACzD,YAAQ,IAAI,IAAI;AAChB,YAAQ,IAAI,aAAa;AACzB,WAAO,KAAK,QAAQ;AAAA,MAChB,SAAS;AAAA,IACb,CAAC;AACD,YAAQ,IAAI,SAAS;AAAA,EACzB,CAAC;AAEL,CAAC;AAED,OAAO,OAAO,KAAM,MAAM;AACtB,UAAQ,IAAI,kCAAkC;AAClD,CAAC;",
+  "names": []
+}

@@ -5,14 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon --exec \"node -r ./utils/esbuild.config.js ./dist/index.js\" -e  .ts"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "cors": "^2.8.5",
+    "esbuild": "^0.15.5",
+    "esbuild-node-externals": "^1.4.1",
     "express": "^4.18.1",
-    "nodemon": "^2.0.19",
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
     "socket.io": "^4.5.1"
   }
 }

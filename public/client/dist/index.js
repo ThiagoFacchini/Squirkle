@@ -1017,7 +1017,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState4(initialState) {
+        function useState5(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1817,7 +1817,7 @@ var require_react_development = __commonJS({
         exports.useMemo = useMemo3;
         exports.useReducer = useReducer;
         exports.useRef = useRef3;
-        exports.useState = useState4;
+        exports.useState = useState5;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -31598,8 +31598,8 @@ Object.assign(lookup2, {
 // views/home/index.tsx
 var import_react4 = __toESM(require_react());
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-QXpOrS2EUOtw/client/views/home/styles.modules.css.js
-var digest = "aca86ae6dcde8abc2403525db43e3ca641633c0fc596c74747fe55d206bfe98d";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-Y7pvK2zrtAXs/client/views/home/styles.modules.css.js
+var digest = "47ed5a715750124ab2ee273ec242846ccae91ae17472aa833b3449e455fbc64d";
 var css = `._container_5a1r6_1 {
     background-color: salmon;
     font-size: 20px;
@@ -31628,8 +31628,8 @@ var home_default = Home;
 // views/sandbox/index.tsx
 var import_react5 = __toESM(require_react());
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-y27mL6ld1n6b/client/views/sandbox/styles.modules.css.js
-var digest2 = "ae9aaa4bbd0bd023dc10aa09fe22345c539499c0c001e55cdce434001d443525";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-R5F8StGpaNhj/client/views/sandbox/styles.modules.css.js
+var digest2 = "0b730f471e49b69da2871bbc99ba40d67189694834d6e39b6cb40b2381df9214";
 var css2 = `._container_1dtej_1 {
     background-color: lime;
     font-size: 20px;
@@ -31661,8 +31661,8 @@ var sandbox_default = Sandbox;
 // views/notfound/index.tsx
 var import_react6 = __toESM(require_react());
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-Zh8J1qVMHGhl/client/views/notfound/styles.modules.css.js
-var digest3 = "d91e4c5169b8bbd2cb630325fa7bf5f052e298165fbfd0dd523092530f05e61b";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-pCSBxFrvP12q/client/views/notfound/styles.modules.css.js
+var digest3 = "9e05873b9111d8574dca1787c0a91a83d5c0a649200c18a60dad4d01388c473c";
 var css3 = `._container_1du2l_1 {
     background-color: red;
     color: white;
@@ -31689,8 +31689,8 @@ var NotFound = () => {
 };
 var notfound_default = NotFound;
 
-// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-8jD98sw89DLr/client/styles.modules.css.js
-var digest4 = "951124594a3834904c356252ed10965c69bf26ec8eeb19c6b132e8365dba8bd9";
+// esbuild-css-modules-plugin-namespace:/var/folders/s1/010bpvrd5jz7kh4_6l274rc00000gn/T/tmp-36250-NqdjS7x9Px9y/client/styles.modules.css.js
+var digest4 = "9d2446c4bd1e101fd417f9d80553f360f407ae1956c1b422156441fa82ba4e77";
 var css4 = `._appContainer_159yo_1 {
     background-color: #333;
     font-size: 20px;
@@ -31812,11 +31812,15 @@ var test_default2 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEEAAAAqCAYAA
 var socket = lookup2("http://localhost:3000");
 var App = () => {
   const { userDetails, updateUserDetails, macros, updateMacros } = (0, import_react7.useContext)(rootStore_default);
+  const [tick, setTick] = (0, import_react7.useState)(0);
   (0, import_react7.useEffect)(() => {
     console.log("effect run");
     socket.on("dada", (data) => {
       console.log("Message from server");
       console.log(data.message);
+    });
+    socket.on("tick", () => {
+      console.log("tick from server");
     });
   }, [socket]);
   const sendMessage = () => {
@@ -31829,7 +31833,7 @@ var App = () => {
   };
   return /* @__PURE__ */ import_react7.default.createElement("div", {
     className: styles_modules_css_default4.appContainer
-  }, "APP.TSX username: ", userDetails.username, "authToken: ", userDetails.authToken, "Is logged: ", userDetails.isLogged, /* @__PURE__ */ import_react7.default.createElement("div", {
+  }, "APP.TSX username: ", userDetails.username, "authToken: ", userDetails.authToken, "Is logged: ", userDetails.isLogged, /* @__PURE__ */ import_react7.default.createElement("br", null), "tick count: ", tick, /* @__PURE__ */ import_react7.default.createElement("br", null), /* @__PURE__ */ import_react7.default.createElement("div", {
     onClick: () => updateUserDetails({ username: "xdontboot", authToken: "123098", isLogged: "true" })
   }, "Update", testIcon(), /* @__PURE__ */ import_react7.default.createElement("img", {
     src: test_default2,

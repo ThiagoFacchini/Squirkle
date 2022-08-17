@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Routes, Route, matchRoutes } from 'react-router-dom'
 import { io } from 'socket.io-client'
 
@@ -16,12 +16,17 @@ const socket = io('http://localhost:3000')
 
 const App = () => {
     const { userDetails, updateUserDetails, macros, updateMacros } = useContext(RootStore)
+    const [ tick, setTick ] = useState(0)
 
     useEffect(() => {
         console.log('effect run')
         socket.on('dada', (data) => {
             console.log('Message from server')
             console.log(data.message)
+        })
+
+        socket.on('tick', () => {
+            console.log('tick from server')
         })
     }, [socket])
 
@@ -45,6 +50,9 @@ const App = () => {
             username: { userDetails.username }
             authToken: { userDetails.authToken }
             Is logged: { userDetails.isLogged }
+            <br/>
+            tick count: {tick}
+            <br/>
             <div onClick={ () => updateUserDetails({ username: 'xdontboot', authToken: '123098', isLogged: 'true' })}>
                 Update
                {testIcon()}
