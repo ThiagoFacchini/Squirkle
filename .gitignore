@@ -1,3 +1,4 @@
 src/client/node_modules/**
 public/client/dist/**
 src/server/node_modules/**
+src/server/dist/**

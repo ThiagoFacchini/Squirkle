@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec \"node -r ./utils/esbuild.config.js ./dist/index.js\" -e  .ts"
+    "start": "nodemon --exec \"node -r esbuild-register ./src/index.ts\" -e .ts",
+    "pack": "node ./utils/esbuild.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "cors": "^2.8.5",
     "esbuild": "^0.15.5",
     "esbuild-node-externals": "^1.4.1",
+    "esbuild-register": "^3.3.3",
     "express": "^4.18.1",
     "nodemon": "^2.0.19"
   },

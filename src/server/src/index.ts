@@ -1,7 +1,9 @@
-const express = require('express')
-const http = require('http')
-const { Server } = require('socket.io')
-const cors = require('cors')
+import express from 'express'
+import http from 'http'
+import { Server } from 'socket.io'
+import cors from 'cors'
+
+import { tick } from './modules/ticker'
 
 const app = express()
 app.use(cors())
@@ -13,6 +15,8 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 })
+
+tick()
 
 io.on('connection', (socket) => {
     console.log(`User connect ${socket.id}`)
@@ -30,5 +34,5 @@ io.on('connection', (socket) => {
 })
 
 server.listen(3000, () => {
-    console.log('[SERVER]: - Running at port 3000')
+    console.log('[SERVER] - Running at port 3000')
 })
