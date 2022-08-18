@@ -10,4 +10,8 @@
         & .fpsContainer {
             color: white;
         }
+
+        & .pingContainer {
+            color: white;
+        }
     }

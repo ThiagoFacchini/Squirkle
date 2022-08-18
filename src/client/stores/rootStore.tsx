@@ -5,11 +5,14 @@ import RootStoreKeys from './rootStore.localStorage'
 
 import UserDetailsType from './TypeUserDetails'
 import MacrosType from './TypeMacros'
+import { Socket, io } from "socket.io-client";
 
 
 type RootStoreType = {
     isDebugVisible: boolean,
     updateIsDebugVisible: (boolean) => void,
+    socketComponent: Socket,
+    updateSocketComponent: (Socker) => void, 
     userDetails: UserDetailsType,
     updateUserDetails: (UserDetailsType) => void,
     macros: MacrosType,
@@ -21,6 +24,8 @@ type RootStoreType = {
 // Default Values
 // --------------------------------------------------------
 const DEFAULT_IS_DEBUG_VISIBLE = true
+
+const DEFAULT_SOCKET_COMPONENT = io()
 
 const DEFAULT_USER_DETAILS = {
     isLogged: false,
@@ -40,6 +45,8 @@ const DEFAULT_MACROS: MacrosType = {
 const RootStore = createContext<RootStoreType>({
     isDebugVisible: DEFAULT_IS_DEBUG_VISIBLE,
     updateIsDebugVisible: () => {},
+    socketComponent: DEFAULT_SOCKET_COMPONENT,
+    updateSocketComponent: () => {},
     userDetails: DEFAULT_USER_DETAILS,
     updateUserDetails: () => {},
     macros: DEFAULT_MACROS,
@@ -63,15 +70,20 @@ if (!isUndefined(localStorage.getItem(RootStoreKeys.macros))) {
 export function RootStoreProvider({ children })  {
 
     const [isDebugVisible, setIsDebugVisible] = useState<boolean>(DEFAULT_IS_DEBUG_VISIBLE)
+    const [socketComponent, setSocketComponent] = useState<Socket>(DEFAULT_SOCKET_COMPONENT)
 
+    // Mock
     const [userDetails, setUserDetails] = useState<UserDetailsType>(DEFAULT_USER_DETAILS)
 
     const [macros, setMacros] = useState({
         debug: !isUndefined(localStorageMacros) ? localStorageMacros.debug : DEFAULT_MACROS.debug
     })
+    // End Mock
 
     const updateIsDebugVisible = (isVisible) => setIsDebugVisible(isVisible)
+    const updateSocketComponent = (socket) => setSocketComponent(socket)
 
+    // Mock
     const updateUserDetails = (newDetails) => {
         setUserDetails((prevState) => { 
             return { ...prevState, ...newDetails }
@@ -87,6 +99,7 @@ export function RootStoreProvider({ children })  {
         return { ...prevState, ...newMacros }
         })
     }
+    // End Mock
  
     return (
         <RootStore.Provider
@@ -94,6 +107,8 @@ export function RootStoreProvider({ children })  {
                 {
                     isDebugVisible,
                     updateIsDebugVisible,
+                    socketComponent,
+                    updateSocketComponent,
                     userDetails,
                     updateUserDetails,
                     macros,

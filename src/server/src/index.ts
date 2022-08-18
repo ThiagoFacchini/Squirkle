@@ -21,6 +21,8 @@ tickerStart()
 
 io.on('connection', (socket) => {
     console.log(`User connect ${socket.id}`)
+    socket.emit('tick', { message: 'testing 222'})
+
 
     socket.on('client', (data) => {
         console.log('Message received - topic: client - message:')
@@ -32,11 +34,16 @@ io.on('connection', (socket) => {
         console.log('emitted')
     })
 
+    socket.on('ping', () => {
+        console.log('pinged')
+        socket.emit('pong', {})
+    })
+
     
-    tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
-        // console.log('ticking to clients')
-        socket.emit('tick', { message: tickCount })
-    }})
+    // tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
+    //     // console.log('ticking to clients')
+    //     socket.emit('tick', { message: tickCount })
+    // }})
 
 })
 

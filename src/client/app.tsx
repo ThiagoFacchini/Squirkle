@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Routes, Route, matchRoutes } from 'react-router-dom'
-import { io } from 'socket.io-client'
+import { Routes, Route } from 'react-router-dom'
+import { Socket, io } from 'socket.io-client'
+import { isEmpty } from 'lodash'
 
 import Home from './views/home'
 import Sandbox from './views/sandbox'
@@ -11,30 +12,28 @@ import RootStore from './stores/rootStore'
 import DebugOverlayStore from './stores/debugOverlayStore';
 
 import styles from './styles.module.css'
-import Icon from './test.svg'
-import myPng from './test.png'
 
-const socket = io('http://localhost:3000')
+const socket: Socket = io('http://localhost:3000')
 
 const App = () => {
-    const { userDetails, updateUserDetails, macros, updateMacros } = useContext(RootStore)
-    const [ tick, setTick ] = useState(0)
-    const { isDebugVisible, updateIsDebugVisible } = useContext(RootStore)
-    const { lastRecordedFPS } = useContext(DebugOverlayStore)
+    const { isDebugVisible, updateIsDebugVisible, socketComponent, updateSocketComponent } = useContext(RootStore)
+
+    useEffect(() => {
+        if (!isEmpty(socket)) updateSocketComponent(socket)
+    }, [])
 
     useEffect(() => {
         console.log('effect run')
-        socket.on('dada', (data) => {
+
+        socketComponent.on('dada', (data) => {
             console.log('Message from server')
             console.log(data.message)
         })
 
-        socket.on('tick', (data) => {
+        socketComponent.on('tick', (data) => {
             console.log(`tick from server ${data.message}`)
         })
-    }, [socket])
-
-    console.log('rendered')
+    }, [socketComponent])
 
 
     const sendMessage = () => {
