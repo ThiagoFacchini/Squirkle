@@ -23,10 +23,14 @@ esBuildDevServer.start(
         minify: false,
         sourcemap: true,
         incremental: true,
-        format: 'esm',
+        // format: 'esm',
         platform: 'browser',
         target: ['chrome58', 'safari11'],
-        loader: { '.png' : "dataurl" },
+        loader: { 
+            '.png' : "dataurl", 
+            '.hdr': 'dataurl', 
+            '.jpg': 'dataurl' 
+        },
         plugins: [
             stylePlugin({
                 postcss: {

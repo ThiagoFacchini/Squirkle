@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom';
 
 import { RootStoreProvider } from './stores/rootStore';
+import { DebugOverlayProvider } from './stores/debugOverlayStore';
 
 import App from './app'
 
@@ -26,8 +27,10 @@ const root = createRoot(rootEl)
 // Prod mode
 root.render(
     <RootStoreProvider>
+    <DebugOverlayProvider>
         <BrowserRouter>
             <App/>
         </BrowserRouter>
+    </DebugOverlayProvider>
     </RootStoreProvider>
 )

@@ -14,6 +14,11 @@ declare module "*.png" {
     export default content;
 }
 
+declare module "*.hdr" {
+    const content: any;
+    export default content;
+}
+
 declare namespace JSX {
     interface IntrinsicElements {
     }

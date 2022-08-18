@@ -8,6 +8,8 @@ import MacrosType from './TypeMacros'
 
 
 type RootStoreType = {
+    isDebugVisible: boolean,
+    updateIsDebugVisible: (boolean) => void,
     userDetails: UserDetailsType,
     updateUserDetails: (UserDetailsType) => void,
     macros: MacrosType,
@@ -18,13 +20,15 @@ type RootStoreType = {
 // --------------------------------------------------------
 // Default Values
 // --------------------------------------------------------
-const defaultUserDetails = {
+const DEFAULT_IS_DEBUG_VISIBLE = false
+
+const DEFAULT_USER_DETAILS = {
     isLogged: false,
     username: null,
     authToken: null
 }
 
-const defaultMacros: MacrosType = {
+const DEFAULT_MACROS: MacrosType = {
     debug: false
 }
 // --------------------------------------------------------
@@ -34,9 +38,11 @@ const defaultMacros: MacrosType = {
 // Store Initialization
 // --------------------------------------------------------
 const RootStore = createContext<RootStoreType>({
-    userDetails: defaultUserDetails,
+    isDebugVisible: DEFAULT_IS_DEBUG_VISIBLE,
+    updateIsDebugVisible: () => {},
+    userDetails: DEFAULT_USER_DETAILS,
     updateUserDetails: () => {},
-    macros: defaultMacros,
+    macros: DEFAULT_MACROS,
     updateMacros: () => {}
 })
 // --------------------------------------------------------
@@ -46,20 +52,25 @@ const RootStore = createContext<RootStoreType>({
 // Rehydration
 // --------------------------------------------------------
 let localStorageMacros
+
 if (!isUndefined(localStorage.getItem(RootStoreKeys.macros))) {
     let localStorageMacroStr = localStorage.getItem(RootStoreKeys.macros) 
     if (localStorageMacroStr) localStorageMacros = JSON.parse(localStorageMacroStr)
 }
 // --------------------------------------------------------
 
+
 export function RootStoreProvider({ children })  {
 
-    const [userDetails, setUserDetails] = useState<UserDetailsType>(defaultUserDetails)
+    const [isDebugVisible, setIsDebugVisible] = useState<boolean>(DEFAULT_IS_DEBUG_VISIBLE)
+
+    const [userDetails, setUserDetails] = useState<UserDetailsType>(DEFAULT_USER_DETAILS)
 
     const [macros, setMacros] = useState({
-        debug: !isUndefined(localStorageMacros) ? localStorageMacros.debug : defaultMacros.debug
+        debug: !isUndefined(localStorageMacros) ? localStorageMacros.debug : DEFAULT_MACROS.debug
     })
 
+    const updateIsDebugVisible = (isVisible) => setIsDebugVisible(isVisible)
 
     const updateUserDetails = (newDetails) => {
         setUserDetails((prevState) => { 
@@ -81,6 +92,8 @@ export function RootStoreProvider({ children })  {
         <RootStore.Provider
             value={
                 {
+                    isDebugVisible,
+                    updateIsDebugVisible,
                     userDetails,
                     updateUserDetails,
                     macros,

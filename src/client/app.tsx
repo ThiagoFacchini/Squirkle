@@ -7,6 +7,7 @@ import Sandbox from './views/sandbox'
 import NotFound from './views/notfound'
 
 import RootStore from './stores/rootStore'
+import DebugOverlayStore from './stores/debugOverlayStore';
 
 import styles from './styles.module.css'
 import Icon from './test.svg'
@@ -17,6 +18,8 @@ const socket = io('http://localhost:3000')
 const App = () => {
     const { userDetails, updateUserDetails, macros, updateMacros } = useContext(RootStore)
     const [ tick, setTick ] = useState(0)
+    const { isDebugVisible, updateIsDebugVisible } = useContext(RootStore)
+    const { lastRecordedFPS } = useContext(DebugOverlayStore)
 
     useEffect(() => {
         console.log('effect run')
@@ -39,6 +42,10 @@ const App = () => {
         })
     }
 
+    const toggleDebug = () => {
+        updateIsDebugVisible(!isDebugVisible)
+    }
+
     return (
         <div className={styles.appContainer}>
             APP.TSX
@@ -55,6 +62,8 @@ const App = () => {
             <div onClick={ () => updateMacros({ debug: 'blah' })}> Macro Update </div>
             <br />
             <div onClick={ sendMessage }> sendMessage </div> */}
+            FPS: {lastRecordedFPS}
+            <div onClick= { toggleDebug }> Toggle Debug </div>
 
             <Routes>
                 <Route path='/' element={<Home />} />
