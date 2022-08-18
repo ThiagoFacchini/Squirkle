@@ -78304,8 +78304,9 @@ var Canvas = /* @__PURE__ */ React3.forwardRef(function Canvas2(_a, forwardedRef
 
 // stylePlugin:/Volumes/External Storag/Projects/Squirkle/src/client/views/home/styles.module.css
 var styles_module_default = {
-  "container": "_container_92s4y_3",
-  "threeContainer": "_threeContainer_92s4y_10"
+  "container": "_container_4qh9d_3",
+  "test": "_test_4qh9d_10",
+  "threeContainer": "_threeContainer_4qh9d_15"
 };
 
 // views/home/index.tsx
@@ -78313,6 +78314,8 @@ var Home = () => {
   return /* @__PURE__ */ import_react6.default.createElement("div", {
     className: styles_module_default.container
   }, /* @__PURE__ */ import_react6.default.createElement("div", {
+    className: styles_module_default.test
+  }, "test"), /* @__PURE__ */ import_react6.default.createElement("div", {
     className: styles_module_default.threeContainer
   }, /* @__PURE__ */ import_react6.default.createElement(Canvas, null, /* @__PURE__ */ import_react6.default.createElement("mesh", null, /* @__PURE__ */ import_react6.default.createElement("boxGeometry", null), /* @__PURE__ */ import_react6.default.createElement("meshStandardMaterial", null)))));
 };
@@ -78355,7 +78358,7 @@ var notfound_default = NotFound;
 
 // stylePlugin:/Volumes/External Storag/Projects/Squirkle/src/client/styles.module.css
 var styles_module_default4 = {
-  "appContainer": "_appContainer_oriht_1"
+  "appContainer": "_appContainer_k1out_1"
 };
 
 // app.tsx

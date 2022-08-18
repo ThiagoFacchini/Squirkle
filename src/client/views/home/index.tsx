@@ -7,6 +7,9 @@ const Home = () => {
 
     return (
         <div className={styles.container}>
+            <div className={styles.test}>
+                test
+            </div>
             <div className={styles.threeContainer }>
                 <Canvas>
                     <mesh>
@@ -15,6 +18,7 @@ const Home = () => {
                     </mesh>
                 </Canvas>
             </div>
+
         </div>
     )
 }

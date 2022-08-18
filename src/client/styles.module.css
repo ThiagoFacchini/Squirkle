@@ -1,6 +1,4 @@
 .appContainer {
-    background-color: #333;
-    font-size: 20px;
     height: 100vh;
-    width: 100vh;
+    width: 100vw;
 }
