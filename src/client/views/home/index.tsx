@@ -1,11 +1,20 @@
 import React from 'react';
-import styles from './styles.modules.css'
+import { Canvas } from '@react-three/fiber'
+
+import styles from './styles.module.css'
 
 const Home = () => {
 
     return (
         <div className={styles.container}>
-            HOME
+            <div className={styles.threeContainer }>
+                <Canvas>
+                    <mesh>
+                        <boxGeometry/>
+                        <meshStandardMaterial/>
+                    </mesh>
+                </Canvas>
+            </div>
         </div>
     )
 }

@@ -8,7 +8,7 @@ import NotFound from './views/notfound'
 
 import RootStore from './stores/rootStore'
 
-import styles from './styles.modules.css'
+import styles from './styles.module.css'
 import Icon from './test.svg'
 import myPng from './test.png'
 
@@ -42,23 +42,19 @@ const App = () => {
     return (
         <div className={styles.appContainer}>
             APP.TSX
-            username: { userDetails.username }
+            {/* username: { userDetails.username }
             authToken: { userDetails.authToken }
             Is logged: { userDetails.isLogged }
-            <br/>
             tick count: {tick}
-            <br/>
             <div onClick={ () => updateUserDetails({ username: 'xdontboot', authToken: '123098', isLogged: 'true' })}>
                 Update
-               <Icon />
-               <img src={myPng} alt='my png'/>
             </div>
         
             Macro Debug: { macros.debug }
             <br />
             <div onClick={ () => updateMacros({ debug: 'blah' })}> Macro Update </div>
             <br />
-            <div onClick={ sendMessage }> sendMessage </div>
+            <div onClick={ sendMessage }> sendMessage </div> */}
 
             <Routes>
                 <Route path='/' element={<Home />} />

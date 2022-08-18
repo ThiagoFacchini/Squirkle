@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
 
     
     tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
-        console.log('ticking to clients')
+        // console.log('ticking to clients')
         socket.emit('tick', { message: tickCount })
     }})
 

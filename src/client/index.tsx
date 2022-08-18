@@ -6,10 +6,12 @@ import { RootStoreProvider } from './stores/rootStore';
 
 import App from './app'
 
+
 const rootEl = document.getElementById('root')
 if (!rootEl) throw new Error('Failed to find root element')
 const root = createRoot(rootEl)
 
+// Dev mode
 // root.render(
 //     <React.StrictMode>
 //         <RootStoreProvider>
@@ -20,6 +22,8 @@ const root = createRoot(rootEl)
 //     </React.StrictMode>
 // )
 
+
+// Prod mode
 root.render(
     <RootStoreProvider>
         <BrowserRouter>

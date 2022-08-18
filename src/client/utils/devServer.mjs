@@ -1,12 +1,20 @@
 import { build } from "esbuild"
 import esBuildDevServer from "esbuild-dev-server"
-import cssModulesPlugin from "esbuild-css-modules-plugin"
 
-import postCssPlugin from "esbuild-plugin-postcss"
+// Dirty hack to load cjs
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+// ESBuild Plugins
 import copyFilePlugin from 'esbuild-copy-files-plugin'
 import svgPlugin from 'esbuild-plugin-svgr'
+import stylePlugin from 'esbuild-style-plugin'
 
-import postCssConfig from "./postcssConfig.mjs"
+// PostCSS Plugins
+import postcssImport from 'postcss-import'
+import postcssNesting from 'postcss-nesting'
+import autoprefixer from 'autoprefixer'
+
 
 esBuildDevServer.start(
     build({
@@ -15,21 +23,28 @@ esBuildDevServer.start(
         minify: false,
         sourcemap: true,
         incremental: true,
-        metafile: true,
         format: 'esm',
-        loader: { '.png' : "dataurl" },
+        platform: 'browser',
         target: ['chrome58', 'safari11'],
-        outdir: '../../public/client/dist',
+        loader: { '.png' : "dataurl" },
         plugins: [
-            cssModulesPlugin(),
-            postCssPlugin.default(postCssConfig),
+            stylePlugin({
+                postcss: {
+                    plugins: [
+                        postcssImport,
+                        postcssNesting,
+                        autoprefixer                        
+                    ]
+                }
+            }),
             copyFilePlugin({
                 source: ['../../public/client/reset.css'],
                 target: ['../../public/client/dist'],
                 copyWithFolder: false
             }),
             svgPlugin()
-        ]
+        ],
+        outdir: '../../public/client/dist',
     }),
     // To run the dev server a permission change is necessary:
     // chmod u+x node_modules/esbuild-dev-server-darwin-x64/devserver

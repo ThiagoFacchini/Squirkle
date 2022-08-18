@@ -1,0 +1,16 @@
+@import  url('./trouble.css');
+
+.container {
+    background-color: salmon;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    & .threeContainer {
+        width: 100%;
+        height: 100%;
+        background-color: lime;
+    }
+}
+
