@@ -20,7 +20,7 @@ type RootStoreType = {
 // --------------------------------------------------------
 // Default Values
 // --------------------------------------------------------
-const DEFAULT_IS_DEBUG_VISIBLE = false
+const DEFAULT_IS_DEBUG_VISIBLE = true
 
 const DEFAULT_USER_DETAILS = {
     isLogged: false,

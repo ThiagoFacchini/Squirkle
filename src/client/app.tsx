@@ -5,6 +5,7 @@ import { io } from 'socket.io-client'
 import Home from './views/home'
 import Sandbox from './views/sandbox'
 import NotFound from './views/notfound'
+import DebugOverlay from './components/debugOverlay';
 
 import RootStore from './stores/rootStore'
 import DebugOverlayStore from './stores/debugOverlayStore';
@@ -48,23 +49,7 @@ const App = () => {
 
     return (
         <div className={styles.appContainer}>
-            APP.TSX
-            {/* username: { userDetails.username }
-            authToken: { userDetails.authToken }
-            Is logged: { userDetails.isLogged }
-            tick count: {tick}
-            <div onClick={ () => updateUserDetails({ username: 'xdontboot', authToken: '123098', isLogged: 'true' })}>
-                Update
-            </div>
-        
-            Macro Debug: { macros.debug }
-            <br />
-            <div onClick={ () => updateMacros({ debug: 'blah' })}> Macro Update </div>
-            <br />
-            <div onClick={ sendMessage }> sendMessage </div> */}
-            FPS: {lastRecordedFPS}
-            <div onClick= { toggleDebug }> Toggle Debug </div>
-
+            <DebugOverlay />
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/sandbox' element={<Sandbox />} />

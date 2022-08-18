@@ -1,3 +1,13 @@
-.container {
-    background-color: lime;
-}
+    .container {
+        z-index: 999;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 150px;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, .5);
+
+        & .fpsContainer {
+            color: white;
+        }
+    }

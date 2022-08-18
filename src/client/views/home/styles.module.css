@@ -7,11 +7,6 @@
     flex-grow: 1;
     justify-content: space-between;
 
-    & .test{
-        height: 20px;
-        background-color: purple;
-    }
-
     & .threeContainer {
         flex-grow: 1;
         background-color: black;

@@ -36,8 +36,6 @@ const Home = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.test}>
-            </div>
             <div className={styles.threeContainer }>
                 <Canvas>
                     <R3FFpsWatcher shouldCalculate={ isDebugVisible } updateCallback={(fps) => updateFps(fps)} />
