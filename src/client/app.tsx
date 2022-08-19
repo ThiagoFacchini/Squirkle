@@ -11,6 +11,8 @@ import DebugOverlay from './components/debugOverlay';
 import RootStore from './stores/rootStore'
 import DebugOverlayStore from './stores/debugOverlayStore';
 
+import useTest from './serviceHooks/useTest'
+
 import styles from './styles.module.css'
 
 const socket: Socket = io('http://localhost:3000')
@@ -46,8 +48,14 @@ const App = () => {
         updateIsDebugVisible(!isDebugVisible)
     }
 
+    const updateTest = useTest()
+
     return (
         <div className={styles.appContainer}>
+            <div onClick={ () => { updateTest() }}>
+                click: { JSON.stringify(isDebugVisible) }
+            </div>
+
             <DebugOverlay />
             <Routes>
                 <Route path='/' element={<Home />} />
