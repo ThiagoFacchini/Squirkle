@@ -15,7 +15,7 @@ import useTest from './serviceHooks/useTest'
 
 import styles from './styles.module.css'
 
-const socket: Socket = io('http://localhost:3000')
+const socket: Socket = io('http://10.0.1.11:3000')
 
 const App = () => {
     const { isDebugVisible, updateIsDebugVisible, socketComponent, updateSocketComponent } = useContext(RootStore)
@@ -59,6 +59,8 @@ const App = () => {
             <DebugOverlay />
             <Routes>
                 <Route path='/' element={<Home />} />
+                {/* <Route path='/login' element={<Login />} />
+                <Route path='/loading' element={<Loading />} /> */}
                 <Route path='/sandbox' element={<Sandbox />} />
                 <Route path='*' element={<NotFound/>} />
             </Routes>

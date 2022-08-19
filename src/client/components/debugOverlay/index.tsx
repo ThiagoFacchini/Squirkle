@@ -1,33 +1,34 @@
-import React, { useRef, useMemo, useEffect, useContext, ReactElement, Fragment, ReactNode } from 'react'
+import React, { useEffect, useContext, Fragment, ReactNode, useCallback } from 'react'
 
 import RootStore from './../../stores/rootStore'
 import DebugOverlayStore from './../../stores/debugOverlayStore'
 
 import styles from './styles.module.css'
+import { Socket } from 'socket.io-client'
 
 const DebugOverlay = () => {
     const { isDebugVisible, updateIsDebugVisible, socketComponent } = useContext(RootStore)
     const { lastRecordedFPS, lastRecordedPing, updatePing } = useContext(DebugOverlayStore)
 
     useEffect(() => {
-        // if (isDebugVisible) {
-        //     let lastTime = Date.now()
-        //     socketComponent.emit('ping', {})
+        if (isDebugVisible) {
+            let lastTime = Date.now()
+            socketComponent.emit('ping', {})
 
-        //     socketComponent.on('pong', () => {
-        //         if (isDebugVisible) {
-        //             let currTime = Date.now()
-        //             const latency = currTime - lastTime
-                    
-        //             updatePing(latency)
-        //             setTimeout(() => {
-        //                 lastTime = Date.now()
-        //                 console.log('reEmmiting')
-        //                 socketComponent.emit('ping', {})
-        //             }, 1000)
-        //         }
-        //     })
-        // }
+            socketComponent.on('pong', () => {
+                let currTime = Date.now()
+                const latency = currTime - lastTime
+
+                updatePing(latency)
+
+                setTimeout(() => {
+                    lastTime = Date.now()
+                    socketComponent.emit('ping', {})
+                }, 1000)
+            })
+        } else {
+            socketComponent.off('pong')
+        }
     }, [socketComponent, isDebugVisible])
 
 

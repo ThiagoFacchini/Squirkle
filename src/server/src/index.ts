@@ -9,9 +9,21 @@ const app = express()
 app.use(cors())
 const server = http.createServer(app)
 
+const corsWhitelist = ['http://localhost:8080', 'http://10.0.1.11:8080']
+
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:8080",
+        origin: function (origin, callback) {
+            if (origin) {
+                if (corsWhitelist.indexOf(origin) !== -1) {
+                    callback(null, true)
+                } else {
+                    callback(new Error('Not allowed by CORS'))
+                }
+            } else {
+                callback(new Error('CORS cannot be undefined'))
+            }
+        },
         methods: ["GET", "POST"]
     }
 })
@@ -35,7 +47,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('ping', () => {
-        console.log('pinged')
+        // console.log('pinged')
         socket.emit('pong', {})
     })
 
