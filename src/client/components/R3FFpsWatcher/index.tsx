@@ -1,15 +1,18 @@
-import React, { useRef, useMemo, Fragment } from 'react'
+import React, { useRef, useMemo, useContext, Fragment } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { throttle } from 'lodash'
 
-type PropsType = {
-    shouldCalculate: boolean,
-    updateCallback: (fps: number) => void
-}
+import DebugOverlayStore from './../../stores/debugOverlayStore'
+import RootStore from './../../stores/rootStore'
+
 
 const DEFAULT_UPDATE_INTERVAL = 1000
 
-const FPSWatcher = (props: PropsType) => {
+const FPSWatcher = () => {
+
+    const { isDebugVisible } = useContext(RootStore)
+    const { updateFps } = useContext(DebugOverlayStore)
+
     const FPSRef = useRef()
     let lastTime = Date.now()
     let lastUpdate = Date.now()
@@ -23,22 +26,25 @@ const FPSWatcher = (props: PropsType) => {
     }, [FPSarr])
 
 
-    const updateFPS = () => {
+    const publishFps = () => {
         let FPSSum: number = 0
+        console.log('publishing fps')
 
         for (let i = 1; i < FPSarr.length; i++) {
             FPSSum += FPSarr[i]
         }
 
         const FPSAvg = FPSSum / FPSarr.length
-        props.updateCallback(parseInt(FPSAvg.toFixed(0))) 
+        updateFps(parseInt(FPSAvg.toFixed(0))) 
         FPSarr = []
         lastUpdate = Date.now()
     }
 
+    // console.log(`re rendered ${Date.now() - lastUpdate}`)
+
 
     useFrame(() => {
-        if (props.shouldCalculate) {
+        if (isDebugVisible) {
             let currTime = Date.now()
 
             // Calculates the FPS
@@ -47,8 +53,9 @@ const FPSWatcher = (props: PropsType) => {
             calculateFPS(delta)
 
             // Check if its time to execute the update callback
+            // console.log(currTime - lastUpdate)
             if ((currTime - lastUpdate) > DEFAULT_UPDATE_INTERVAL) {
-                updateFPS()
+                publishFps()
             }
         } 
     })

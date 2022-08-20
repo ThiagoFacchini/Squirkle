@@ -31,7 +31,10 @@ export function DebugOverlayProvider({ children }) {
     const [lastRecordedFPS, setLastRecordedFPS] = useState<number>(DEFAULT_LAST_RECORDED_FPS)
     const [lastRecordedPing, setLastRecordedPing] = useState<number>(DEFAULT_LAST_RECORDED_PING)
 
-    const updateFps = (fps) => setLastRecordedFPS(fps)
+    const updateFps = (fps) => {
+        console.log('fps updated')
+        setLastRecordedFPS(fps)
+    }
     const updatePing = (ping) => setLastRecordedPing(ping)
 
     return (

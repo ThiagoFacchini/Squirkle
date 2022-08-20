@@ -48,7 +48,8 @@ esBuildDevServer.start(
             }),
             svgPlugin()
         ],
-        outdir: '../../public/client/dist',
+        outdir: '../../public/client/dist'
+        // external: ["three/examples/jsm/controls/OrbitControls"]
     }),
     // To run the dev server a permission change is necessary:
     // chmod u+x node_modules/esbuild-dev-server-darwin-x64/devserver

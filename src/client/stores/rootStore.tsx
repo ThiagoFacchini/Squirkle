@@ -13,6 +13,8 @@ type RootStoreType = {
     updateIsDebugVisible: (boolean) => void,
     socketComponent: Socket,
     updateSocketComponent: (Socker) => void, 
+    tickCount: number,
+    updateTickCount: (number) => void,
     userDetails: UserDetailsType,
     updateUserDetails: (UserDetailsType) => void,
     macros: MacrosType,
@@ -26,6 +28,8 @@ type RootStoreType = {
 const DEFAULT_IS_DEBUG_VISIBLE = true
 
 const DEFAULT_SOCKET_COMPONENT = io()
+
+const DEFAULT_PING_COUNT = 0
 
 const DEFAULT_USER_DETAILS = {
     isLogged: false,
@@ -47,6 +51,8 @@ const RootStore = createContext<RootStoreType>({
     updateIsDebugVisible: () => {},
     socketComponent: DEFAULT_SOCKET_COMPONENT,
     updateSocketComponent: () => {},
+    tickCount: DEFAULT_PING_COUNT,
+    updateTickCount: () => {},
     userDetails: DEFAULT_USER_DETAILS,
     updateUserDetails: () => {},
     macros: DEFAULT_MACROS,
@@ -71,19 +77,21 @@ export function RootStoreProvider({ children })  {
 
     const [isDebugVisible, setIsDebugVisible] = useState<boolean>(DEFAULT_IS_DEBUG_VISIBLE)
     const [socketComponent, setSocketComponent] = useState<Socket>(DEFAULT_SOCKET_COMPONENT)
+    const [tickCount, setTickCount] = useState<number>(DEFAULT_PING_COUNT)
 
+
+    const updateIsDebugVisible = (isVisible) => setIsDebugVisible(isVisible)
+    const updateSocketComponent = (socket) => setSocketComponent(socket)
+    const updateTickCount = (count) => setTickCount(count)
+
+    
     // Mock
     const [userDetails, setUserDetails] = useState<UserDetailsType>(DEFAULT_USER_DETAILS)
 
     const [macros, setMacros] = useState({
         debug: !isUndefined(localStorageMacros) ? localStorageMacros.debug : DEFAULT_MACROS.debug
     })
-    // End Mock
 
-    const updateIsDebugVisible = (isVisible) => setIsDebugVisible(isVisible)
-    const updateSocketComponent = (socket) => setSocketComponent(socket)
-
-    // Mock
     const updateUserDetails = (newDetails) => {
         setUserDetails((prevState) => { 
             return { ...prevState, ...newDetails }
@@ -109,6 +117,8 @@ export function RootStoreProvider({ children })  {
                     updateIsDebugVisible,
                     socketComponent,
                     updateSocketComponent,
+                    tickCount,
+                    updateTickCount,
                     userDetails,
                     updateUserDetails,
                     macros,

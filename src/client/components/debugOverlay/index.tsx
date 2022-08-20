@@ -7,7 +7,7 @@ import styles from './styles.module.css'
 import { Socket } from 'socket.io-client'
 
 const DebugOverlay = () => {
-    const { isDebugVisible, updateIsDebugVisible, socketComponent } = useContext(RootStore)
+    const { isDebugVisible, updateIsDebugVisible, socketComponent, updateTickCount, tickCount } = useContext(RootStore)
     const { lastRecordedFPS, lastRecordedPing, updatePing } = useContext(DebugOverlayStore)
 
     useEffect(() => {
@@ -31,6 +31,20 @@ const DebugOverlay = () => {
         }
     }, [socketComponent, isDebugVisible])
 
+    
+    useEffect(() => {
+        console.log('effect run')
+
+        socketComponent.on('dada', (data) => {
+            console.log('Message from server')
+            console.log(data.message)
+        })
+
+        socketComponent.on('tick', (data) => {
+            updateTickCount(data.message)
+        })
+    }, [socketComponent])
+
 
     const displayFPSWatcher = (): ReactNode => {
         return (
@@ -44,7 +58,15 @@ const DebugOverlay = () => {
     const displayPing = (): ReactNode => {
         return (
             <div className={styles.pingContainer}>
-                PING: {lastRecordedPing}
+                PING: {lastRecordedPing}ms
+            </div>
+        )
+    }
+
+    const displayTickCount = (): ReactNode => {
+        return (
+            <div className={styles.tickCountContainer}>
+                Tick: { tickCount }
             </div>
         )
     }
@@ -55,6 +77,7 @@ const DebugOverlay = () => {
             <div className={ styles.container }>
                 { displayFPSWatcher() }
                 { displayPing() }
+                { displayTickCount() }
             </div>
         )
     }

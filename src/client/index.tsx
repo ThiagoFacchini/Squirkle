@@ -32,6 +32,7 @@ const root = createRoot(rootEl)
 //     </React.StrictMode>
 // )
 
+console.log('Index re rendered...')
 // Prod mode
 root.render(
     <CombinedProviders>

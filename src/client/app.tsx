@@ -9,7 +9,6 @@ import NotFound from './views/notfound'
 import DebugOverlay from './components/debugOverlay';
 
 import RootStore from './stores/rootStore'
-import DebugOverlayStore from './stores/debugOverlayStore';
 
 import useTest from './serviceHooks/useTest'
 
@@ -18,42 +17,29 @@ import styles from './styles.module.css'
 const socket: Socket = io('http://10.0.1.11:3000')
 
 const App = () => {
-    const { isDebugVisible, updateIsDebugVisible, socketComponent, updateSocketComponent } = useContext(RootStore)
+    // console.log('App Re rendered...')
+    const {  updateSocketComponent } = useContext(RootStore)
 
     useEffect(() => {
         if (!isEmpty(socket)) updateSocketComponent(socket)
     }, [])
 
-    useEffect(() => {
-        console.log('effect run')
+    // const sendMessage = () => {
+    //     socket.emit('client', {
+    //         message: 'Client message'
+    //     })
+    // }
 
-        socketComponent.on('dada', (data) => {
-            console.log('Message from server')
-            console.log(data.message)
-        })
-
-        socketComponent.on('tick', (data) => {
-            console.log(`tick from server ${data.message}`)
-        })
-    }, [socketComponent])
-
-
-    const sendMessage = () => {
-        socket.emit('client', {
-            message: 'Client message'
-        })
-    }
-
-    const toggleDebug = () => {
-        updateIsDebugVisible(!isDebugVisible)
-    }
+    // const toggleDebug = () => {
+    //     updateIsDebugVisible(!isDebugVisible)
+    // }
 
     const updateTest = useTest()
 
     return (
         <div className={styles.appContainer}>
             <div onClick={ () => { updateTest() }}>
-                click: { JSON.stringify(isDebugVisible) }
+                click to toggle
             </div>
 
             <DebugOverlay />

@@ -33,7 +33,7 @@ tickerStart()
 
 io.on('connection', (socket) => {
     console.log(`User connect ${socket.id}`)
-    socket.emit('tick', { message: 'testing 222'})
+    // socket.emit('tick', { message: 'testing 222'})
 
 
     socket.on('client', (data) => {
@@ -52,10 +52,11 @@ io.on('connection', (socket) => {
     })
 
     
-    // tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
-    //     // console.log('ticking to clients')
-    //     socket.emit('tick', { message: tickCount })
-    // }})
+    tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
+        // console.log('ticking to clients')
+        // socket.emit('tick', { message: tickCount })
+        io.sockets.emit('tick', { message: tickCount })
+    }})
 
 })
 
