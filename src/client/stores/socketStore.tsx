@@ -49,7 +49,9 @@ export function SocketStoreProvider({ children }) {
 
   const updateLastRecordedPing = (ping) => setLastRecordedPing(ping)
 
-  const updateTickCount = (tick) => setTickCount(tick)
+  const updateTickCount = (tick) => {
+    setTickCount(tick)
+  }
 
   return (
     <SocketStore.Provider
