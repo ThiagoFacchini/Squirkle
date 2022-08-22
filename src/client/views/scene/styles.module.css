@@ -1,0 +1,14 @@
+/* @import  url('./trouble.css'); */
+
+.container {
+  background-color: salmon;
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
+  justify-content: space-between;
+
+  & .threeContainer {
+    flex-grow: 1;
+    background-color: black;
+  }
+}

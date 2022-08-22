@@ -3,20 +3,11 @@ import { isEqual, isUndefined } from 'lodash'
 
 import RootStoreKeys from './rootStore.localStorage'
 
-import UserDetailsType from './TypeUserDetails'
 import MacrosType from './TypeMacros'
 import { Socket, io } from "socket.io-client";
 
 
 type RootStoreType = {
-    isDebugVisible: boolean,
-    updateIsDebugVisible: (boolean) => void,
-    socketComponent: Socket,
-    updateSocketComponent: (Socker) => void, 
-    tickCount: number,
-    updateTickCount: (number) => void,
-    userDetails: UserDetailsType,
-    updateUserDetails: (UserDetailsType) => void,
     macros: MacrosType,
     updateMacros: (MacrosType) => void
 }
@@ -25,18 +16,6 @@ type RootStoreType = {
 // --------------------------------------------------------
 // Default Values
 // --------------------------------------------------------
-const DEFAULT_IS_DEBUG_VISIBLE = true
-
-const DEFAULT_SOCKET_COMPONENT = io()
-
-const DEFAULT_PING_COUNT = 0
-
-const DEFAULT_USER_DETAILS = {
-    isLogged: false,
-    username: null,
-    authToken: null
-}
-
 const DEFAULT_MACROS: MacrosType = {
     debug: false
 }
@@ -47,14 +26,6 @@ const DEFAULT_MACROS: MacrosType = {
 // Store Initialization
 // --------------------------------------------------------
 const RootStore = createContext<RootStoreType>({
-    isDebugVisible: DEFAULT_IS_DEBUG_VISIBLE,
-    updateIsDebugVisible: () => {},
-    socketComponent: DEFAULT_SOCKET_COMPONENT,
-    updateSocketComponent: () => {},
-    tickCount: DEFAULT_PING_COUNT,
-    updateTickCount: () => {},
-    userDetails: DEFAULT_USER_DETAILS,
-    updateUserDetails: () => {},
     macros: DEFAULT_MACROS,
     updateMacros: () => {}
 })
@@ -74,29 +45,10 @@ if (!isUndefined(localStorage.getItem(RootStoreKeys.macros))) {
 
 
 export function RootStoreProvider({ children })  {
-
-    const [isDebugVisible, setIsDebugVisible] = useState<boolean>(DEFAULT_IS_DEBUG_VISIBLE)
-    const [socketComponent, setSocketComponent] = useState<Socket>(DEFAULT_SOCKET_COMPONENT)
-    const [tickCount, setTickCount] = useState<number>(DEFAULT_PING_COUNT)
-
-
-    const updateIsDebugVisible = (isVisible) => setIsDebugVisible(isVisible)
-    const updateSocketComponent = (socket) => setSocketComponent(socket)
-    const updateTickCount = (count) => setTickCount(count)
-
-    
     // Mock
-    const [userDetails, setUserDetails] = useState<UserDetailsType>(DEFAULT_USER_DETAILS)
-
     const [macros, setMacros] = useState({
         debug: !isUndefined(localStorageMacros) ? localStorageMacros.debug : DEFAULT_MACROS.debug
     })
-
-    const updateUserDetails = (newDetails) => {
-        setUserDetails((prevState) => { 
-            return { ...prevState, ...newDetails }
-        })
-    }
 
     const updateMacros = (newMacros) => {
         setMacros((prevState) => {
@@ -113,14 +65,6 @@ export function RootStoreProvider({ children })  {
         <RootStore.Provider
             value={
                 {
-                    isDebugVisible,
-                    updateIsDebugVisible,
-                    socketComponent,
-                    updateSocketComponent,
-                    tickCount,
-                    updateTickCount,
-                    userDetails,
-                    updateUserDetails,
                     macros,
                     updateMacros
                 }

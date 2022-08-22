@@ -1,16 +1,16 @@
-import React, { useRef } from 'react'
+import React, { useRef, useContext } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useHelper } from '@react-three/drei'
 import { BoxHelper } from 'three'
 
-type AnimatedCubePropsType = {
-    isDebugVisible: boolean
-}
+import WindowsStore from './../../stores/windowsStore'
 
-const AnimatedCube = (props: AnimatedCubePropsType) => {
+
+const AnimatedCube = () => {
+    const { isDebugOverlayVisible } = useContext(WindowsStore)
     const meshRef = useRef<THREE.Mesh>(null)
 
-    useHelper(props.isDebugVisible && meshRef, BoxHelper, "blue")
+    useHelper(isDebugOverlayVisible && meshRef, BoxHelper, "blue")
 
     useFrame(() => {
         if (meshRef.current) {

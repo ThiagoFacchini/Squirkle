@@ -4,15 +4,22 @@ import { BrowserRouter } from 'react-router-dom';
 
 import composeProviders from './utils/composeProviders'
 
+import { LoginStoreProvider } from './stores/loginStore' 
+import { SocketStoreProvider } from './stores/socketStore'
+import { SceneStoreProvider } from './stores/sceneStore'
+import { WindowsStoreProvider } from './stores/windowsStore'
+
 import { RootStoreProvider } from './stores/rootStore';
-import { DebugOverlayProvider } from './stores/debugOverlayStore';
 
 import App from './app'
 
 
 const CombinedProviders = composeProviders([
-    RootStoreProvider,
-    DebugOverlayProvider
+    LoginStoreProvider,
+    SocketStoreProvider,
+    SceneStoreProvider,
+    WindowsStoreProvider,
+    RootStoreProvider
 ])
 
 

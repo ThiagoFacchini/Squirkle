@@ -1,15 +1,39 @@
-@import  url('./trouble.css');
-
 .container {
-    background-color: salmon;
-    display: flex;
-    flex-flow: column;
-    flex-grow: 1;
-    justify-content: space-between;
+  color: white;
+  font-size: 20px;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    & .threeContainer {
-        flex-grow: 1;
-        background-color: black;
-    }
+  & .logo {
+    margin-top: 200px;
+  }
+
+  & .disclaimer {
+    padding: 10px;
+    border: 1px solid #444;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ccc;
+    max-width: 500px;
+    max-height: 200px;
+    width: 500px;
+    height: 200px;
+    overflow: auto;
+    user-select: none;
+  }
+
+  & .button {
+    margin-top: 20px;
+    padding: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 15px;
+    background-color: #333;
+    color: #ccc;
+    user-select: none;
+    cursor: pointer;
+  }
 }
-

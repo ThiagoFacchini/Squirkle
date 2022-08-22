@@ -9,7 +9,12 @@ const app = express()
 app.use(cors())
 const server = http.createServer(app)
 
-const corsWhitelist = ['http://localhost:8080', 'http://10.0.1.11:8080']
+const corsWhitelist = [
+    'http://localhost:8080', 
+    'http://10.0.1.11:8080',
+    'http://10.76.254.24:8080',
+    'http://100.64.29.20:8080'
+]
 
 const io = new Server(server, {
     cors: {

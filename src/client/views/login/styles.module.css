@@ -1,0 +1,35 @@
+.container {
+  color: white;
+  font-size: 20px;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+
+  & .messageContainer {
+    margin-top: 0;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid #666;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+  }
+
+  & .formSection {
+    margin-top: 20px;
+  }
+
+  & .button {
+    margin-top: 20px;
+    padding: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 15px;
+    background-color: #333;
+    color: #ccc;
+    user-select: none;
+    cursor: pointer;
+  }
+}

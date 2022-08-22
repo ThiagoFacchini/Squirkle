@@ -2,16 +2,16 @@ import React, { useRef, useMemo, useContext, Fragment } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { throttle } from 'lodash'
 
-import DebugOverlayStore from './../../stores/debugOverlayStore'
-import RootStore from './../../stores/rootStore'
+import WindowsStore from './../../stores/windowsStore'
+import SceneStore from './../../stores/sceneStore'
 
 
 const DEFAULT_UPDATE_INTERVAL = 1000
 
 const FPSWatcher = () => {
 
-    const { isDebugVisible } = useContext(RootStore)
-    const { updateFps } = useContext(DebugOverlayStore)
+    const { isDebugOverlayVisible } = useContext(WindowsStore)
+    const { lastRecordedFPS, updateLastRecordedFPS } = useContext(SceneStore)
 
     const FPSRef = useRef()
     let lastTime = Date.now()
@@ -28,14 +28,13 @@ const FPSWatcher = () => {
 
     const publishFps = () => {
         let FPSSum: number = 0
-        console.log('publishing fps')
 
         for (let i = 1; i < FPSarr.length; i++) {
             FPSSum += FPSarr[i]
         }
 
         const FPSAvg = FPSSum / FPSarr.length
-        updateFps(parseInt(FPSAvg.toFixed(0))) 
+        updateLastRecordedFPS(parseInt(FPSAvg.toFixed(0))) 
         FPSarr = []
         lastUpdate = Date.now()
     }
@@ -44,7 +43,7 @@ const FPSWatcher = () => {
 
 
     useFrame(() => {
-        if (isDebugVisible) {
+        if (isDebugOverlayVisible) {
             let currTime = Date.now()
 
             // Calculates the FPS

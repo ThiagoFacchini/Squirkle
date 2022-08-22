@@ -1,49 +1,27 @@
-import React, { useContext } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
+import React from 'react';
+import { useNavigate } from 'react-router-dom'
 
 import styles from './styles.module.css'
-import envBackground from './../../assets/env.hdr'
 
-import R3FFpsWatcher from '../../components/R3FFpsWatcher'
-import R3FAnimatedCube from '../../components/R3FAnimatedCube'
-import R3FCameraOrbitController from '../../components/R3FCameraOrbitControlller'
-import R3FSun from '../../components/R3FSun'
-
-import RootStore from './../../stores/rootStore'
-import DebugOverlayStore from './../../stores/debugOverlayStore'
-
+import logo from './../../assets/logo.png'
 
 const Home = () => {
-    const { isDebugVisible } = useContext(RootStore)
-    
-    console.log('Home Re rendered...')
-    return (
-        <div className={styles.container}>
-            <div className={styles.threeContainer }>
-                <Canvas shadows={true}>
-                    {/* Debug Designed Components */}
-                    <R3FFpsWatcher/>
-                    <axesHelper visible={ isDebugVisible } args={[3]}/>
-                    <gridHelper visible={ isDebugVisible } args={[10, 10]} />
+  const navigate = useNavigate()
 
-                    {/* Production Components */}
-                    <R3FCameraOrbitController />
-                    <R3FSun />
-                    <R3FAnimatedCube isDebugVisible={ true }/>
-                    {/* <ambientLight intensity={0.1}/> */}
-                    {/* <directionalLight color={'red'} position={[0, 0, 5]} /> */}
-
-                    <mesh scale={[25, 25, 25]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={true}>
-                        <planeGeometry/>
-                        <meshPhongMaterial color={'green'}/>
-                    </mesh>
-                    {/* <Environment background={"only"} files={ envBackground }/> */}                    
-                </Canvas>
-            </div>
-
+  return (
+      <div className={styles.container}>
+        <div className={styles.logo}>
+          <img src={ logo } width='520'/>
         </div>
-    )
+        <div className={styles.disclaimer}>
+          Lorem ipsum dolor sit aet, consectetur adipiscing elit. Sed nisi justo, egestas ut mi sit amet, vehicula elementum urna. Suspendisse vitae quam non nisi tempus mollis. Etiam lobortis interdum tincidunt. Aliquam dapibus ex at turpis congue placerat. Quisque mattis diam quis tellus lacinia, vitae venenatis nulla iaculis. Maecenas in tincidunt neque. Integer porta, neque ut semper aliquet, arcu enim bibendum purus, et varius ligula massa nec sapien. Maecenas eleifend felis ac elit congue, a vehicula mi venenatis. Pellentesque sed orci non urna dapibus congue.<br/>
+          Mauris nec facilisis velit. Ut sit amet mauris ligula. Integer tempor quis lacus id varius. Sed a metus ac orci tempor maximus. Praesent pretium quis nisl ultricies vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet orci in diam pretium fermentum. Quisque id rutrum nunc. Curabitur tempus sed tortor eu auctor. Proin tempor augue maximus rutrum feugiat. Vivamus sed erat tortor. Duis arcu nisi, mattis vitae dui sed, fringilla pretium libero. Vivamus et molestie dui, vitae ultrices mi. Curabitur metus purus, vestibulum quis urna et, dictum tempus odio. Nunc ut odio sed purus varius viverra ac in sem.
+        </div>
+        <div className={styles.button} onClick={ () => navigate('/login')}>
+          Start
+        </div>
+      </div>
+  )
 }
 
 export default Home

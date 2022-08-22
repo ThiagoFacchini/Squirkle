@@ -3,19 +3,17 @@ import { useFrame } from '@react-three/fiber'
 import { useHelper } from '@react-three/drei'
 import { BoxHelper, SpotLightHelper } from 'three'
 
-import RootStore from './../../stores/rootStore'
+import WindowsStore from './../../stores/windowsStore'
 
 const Sun = () => {
-    // const { isDebugVisible, tickCount } = useContext(RootStore)
-
-    // console.log(tickCount)
+    const { isDebugOverlayVisible } = useContext(WindowsStore)
 
     const sunRef = useRef<THREE.SpotLight>(null)
     const moonRef = useRef<THREE.SpotLight>(null)
-    console.log('R3FSun re rendered')
+    // console.log('R3FSun re rendered')
 
-    // useHelper(isDebugVisible && sunRef, SpotLightHelper, "yellow")
-    // useHelper(isDebugVisible && moonRef, SpotLightHelper, "white")
+    useHelper(isDebugOverlayVisible && sunRef, SpotLightHelper, "yellow")
+    useHelper(isDebugOverlayVisible && moonRef, SpotLightHelper, "white")
 
     // const hour = tickCount / 60
     // const minute = tickCount

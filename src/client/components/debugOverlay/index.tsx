@@ -1,56 +1,35 @@
 import React, { useEffect, useContext, Fragment, ReactNode, useCallback } from 'react'
 
-import RootStore from './../../stores/rootStore'
-import DebugOverlayStore from './../../stores/debugOverlayStore'
+import WindowsStore from './../../stores/windowsStore'
+import SceneStore from './../../stores/sceneStore'
+import SocketStore from './../../stores/socketStore'
 
 import styles from './styles.module.css'
-import { Socket } from 'socket.io-client'
 
 const DebugOverlay = () => {
-    const { isDebugVisible, updateIsDebugVisible, socketComponent, updateTickCount, tickCount } = useContext(RootStore)
-    const { lastRecordedFPS, lastRecordedPing, updatePing } = useContext(DebugOverlayStore)
+    const { isDebugOverlayVisible, updateIsDebugOverlayVisible } = useContext(WindowsStore)
+    const { socketComponent, lastRecordedPing, tickCount } = useContext(SocketStore)
+    const { lastRecordedFPS } = useContext(SceneStore)
 
     useEffect(() => {
-        if (isDebugVisible) {
-            let lastTime = Date.now()
-            socketComponent.emit('ping', {})
-
-            socketComponent.on('pong', () => {
-                let currTime = Date.now()
-                const latency = currTime - lastTime
-
-                updatePing(latency)
-
-                setTimeout(() => {
-                    lastTime = Date.now()
-                    socketComponent.emit('ping', {})
-                }, 1000)
-            })
-        } else {
-            socketComponent.off('pong')
+        document.removeEventListener('keydown', toggleDebug)
+        document.addEventListener('keydown', toggleDebug)
+        
+        return () => {
+            document.removeEventListener('keydown', toggleDebug)
         }
-    }, [socketComponent, isDebugVisible])
+    }, [isDebugOverlayVisible])
 
-    
-    useEffect(() => {
-        console.log('effect run')
 
-        socketComponent.on('dada', (data) => {
-            console.log('Message from server')
-            console.log(data.message)
-        })
-
-        socketComponent.on('tick', (data) => {
-            updateTickCount(data.message)
-        })
-    }, [socketComponent])
+    const toggleDebug = (evt: KeyboardEvent) => {
+        if (evt.key === 'F3') updateIsDebugOverlayVisible(!isDebugOverlayVisible)        
+    }
 
 
     const displayFPSWatcher = (): ReactNode => {
         return (
             <div className={styles.fpsContainer}>
                 FPS: {lastRecordedFPS}
-                <div onClick={() => updateIsDebugVisible(!isDebugVisible) }> Toggle Debug </div>
             </div>
         )
     }
@@ -59,6 +38,14 @@ const DebugOverlay = () => {
         return (
             <div className={styles.pingContainer}>
                 PING: {lastRecordedPing}ms
+            </div>
+        )
+    }
+
+    const displaySocketId = (): ReactNode => {
+        return (
+            <div className={styles.socketIdContainer}>
+                Socket Id: {socketComponent.id}
             </div>
         )
     }
@@ -72,11 +59,12 @@ const DebugOverlay = () => {
     }
 
 
-    if (isDebugVisible) {
+    if (isDebugOverlayVisible) {
         return (
             <div className={ styles.container }>
                 { displayFPSWatcher() }
                 { displayPing() }
+                { displaySocketId() }
                 { displayTickCount() }
             </div>
         )
