@@ -1,9 +1,9 @@
 import React, { useContext, Fragment } from 'react'
 
-import WindowsStore from './../../stores/windowsStore'
+import useWindowsStore from './../../stores/windowsStore'
 
 const AxisHelper = () => {
-  const { isDebugOverlayVisible } = useContext(WindowsStore)
+  const isDebugOverlayVisible = useWindowsStore((state) => state.isDebugOverlayVisible)
 
   if (isDebugOverlayVisible) {
     return (

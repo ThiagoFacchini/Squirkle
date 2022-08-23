@@ -1,15 +1,20 @@
 import React, { useEffect, useContext, Fragment, ReactNode, useCallback } from 'react'
 
-import WindowsStore from './../../stores/windowsStore'
-import SceneStore from './../../stores/sceneStore'
-import SocketStore from './../../stores/socketStore'
+import useWindowsStore from './../../stores/windowsStore'
+import useSceneStore from './../../stores/sceneStore'
+import useSocketStore from './../../stores/socketStore'
 
 import styles from './styles.module.css'
 
 const DebugOverlay = () => {
-    const { isDebugOverlayVisible, updateIsDebugOverlayVisible } = useContext(WindowsStore)
-    const { socketComponent, lastRecordedPing, tickCount } = useContext(SocketStore)
-    const { lastRecordedFPS } = useContext(SceneStore)
+    const socketComponent = useSocketStore((state) => state.socketComponent)
+    const lastRecordedPing = useSocketStore((state) => state.lastRecordedPing)
+    const tickCount = useSocketStore((state) => state.tickCount)
+
+    const isDebugOverlayVisible = useWindowsStore((state) => state.isDebugOverlayVisible)
+    const updateIsDebugOverlayVisible = useWindowsStore((state) => state.updateIsDebugOverlayVisible)
+
+    const lastRecordedFPS = useSceneStore((state) => state.lastRecordedFPS)
 
     useEffect(() => {
         document.removeEventListener('keydown', toggleDebug)

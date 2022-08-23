@@ -1,11 +1,11 @@
-import React, { createContext, useState } from 'react'
+import create from 'zustand'
 
 // --------------------------------------------------------
 // Type Definitions
 // --------------------------------------------------------
-type SceneStoreType = {
+interface SceneStoreType {
   lastRecordedFPS: number,
-  updateLastRecordedFPS: (number) => void,
+  updateLastRecordedFPS: (fps: number) => void
 }
 // --------------------------------------------------------
 
@@ -15,34 +15,9 @@ type SceneStoreType = {
 const DEFAULT_LAST_RECORDED_FPS = 0
 // --------------------------------------------------------
 
-
-// --------------------------------------------------------
-// Store Initialization
-// --------------------------------------------------------
-const SceneStore = createContext<SceneStoreType>({
+export const useSceneStore = create<SceneStoreType>()((set) => ({
   lastRecordedFPS: DEFAULT_LAST_RECORDED_FPS,
-  updateLastRecordedFPS: () => {}
-})
-// --------------------------------------------------------
+  updateLastRecordedFPS: (fps) => set((state) => ({ lastRecordedFPS: fps }))
+}))
 
-
-export function SceneStoreProvider({ children }) {
-  const [lastRecordedFPS, setLastRecordedFPS] = useState<number>(DEFAULT_LAST_RECORDED_FPS)
-  
-  const updateLastRecordedFPS = (fps) => setLastRecordedFPS(fps)
-
-  return (
-    <SceneStore.Provider
-      value={
-        {
-          lastRecordedFPS,
-          updateLastRecordedFPS
-        }
-      }
-    >
-      { children }
-    </SceneStore.Provider>
-  )
-} 
-
-export default SceneStore
+export default useSceneStore

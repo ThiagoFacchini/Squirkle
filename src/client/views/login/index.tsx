@@ -2,15 +2,23 @@ import React, { useRef, useContext, useState, Fragment, useCallback } from 'reac
 import { useNavigate } from 'react-router-dom'
 import { isNull, isEmpty } from 'lodash'
 
-import LoginStore from './../../stores/loginStore'
-import SocketStore from './../../stores/socketStore'
+import useLoginStore from './../../stores/loginStore'
+import useSocketStore from './../../stores/socketStore'
 
 import styles from './styles.module.css'
 
 
 const Login = () => {
-  const { username, updateUsername, password, updatePassword, serverAddress, updateServerAddress } = useContext(LoginStore)
-  const { socketComponent, updateSocketComponent } = useContext(SocketStore)
+  const username = useLoginStore((state) => state.username)
+  const password = useLoginStore((state) => state.password)
+  const serverAddress = useLoginStore((state) => state.serverAddress)
+  const socketComponent = useSocketStore((state) => state.socketComponent)
+  
+  const updateUsername = useLoginStore((state) => state.updateUsername)
+  const updatePassword = useLoginStore((state) => state.updatePassword)
+  const updateServerAddress = useLoginStore((state) => state.updateServerAddress)
+  const updateSocketComponent = useSocketStore((state) => state.updateSocketComponent)
+
   const [reason, setReason] = useState<string>()
 
   const navigate = useNavigate()
@@ -19,7 +27,10 @@ const Login = () => {
   const passwordRef: any = useRef()
   const serverAddressRef: any = useRef()
 
-
+  /**
+   * Validates the login form and submit the user to the login screen.
+   * @returns void 
+   */
   const tryLogin = () => {
     let shouldSubmit = true
   
@@ -53,7 +64,11 @@ const Login = () => {
 
   }
 
-  const shouldRenderReason = useCallback(() => {
+  /**
+   * 
+   * @returns <ReactElement> containing the reason on why the login submission failed | <Fragment>
+   */
+  const shouldRenderReason = () => {
     if (isEmpty(reason)) {
       return <Fragment />
     } else {
@@ -63,7 +78,8 @@ const Login = () => {
         </div>
       )
     }
-  }, [reason])
+  }
+
 
   return (
       <div className={styles.container}>

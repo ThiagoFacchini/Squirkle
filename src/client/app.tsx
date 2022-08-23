@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom'
-import { Socket, io } from 'socket.io-client'
-import { isEmpty } from 'lodash'
 
 import Home from './views/home'
 import Login from './views/login'
@@ -10,14 +8,14 @@ import Scene from './views/scene'
 import Sandbox from './views/sandbox'
 import NotFound from './views/notfound'
 
-import useTest from './serviceHooks/useTest'
+// import useTest from './serviceHooks/useTest'
 
 import styles from './styles.module.css'
 
 
 const App = () => {
     console.log('[APP] Rendered')
-    const updateTest = useTest()
+    // const updateTest = useTest()
 
     return (
         <div className={styles.appContainer}>

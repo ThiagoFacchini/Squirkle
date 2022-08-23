@@ -1,11 +1,11 @@
-import React, { createContext, useState } from 'react'
+import create from 'zustand'
 
 // --------------------------------------------------------
 // Type Definitions
 // --------------------------------------------------------
-type WindowsStoreType = {
+interface WindowsStoreType {
   isDebugOverlayVisible: boolean,
-  updateIsDebugOverlayVisible: (boolean) => void,
+  updateIsDebugOverlayVisible: (isVisible: boolean) => void
 }
 // --------------------------------------------------------
 
@@ -15,35 +15,9 @@ type WindowsStoreType = {
 const DEFAULT_IS_DEBUG_OVERLAY_VISIBLE = false
 // --------------------------------------------------------
 
-
-// --------------------------------------------------------
-// Store Initialization
-// --------------------------------------------------------
-const WindowsStore = createContext<WindowsStoreType>({
+export const useWindowsStore = create<WindowsStoreType>()((set) => ({
   isDebugOverlayVisible: DEFAULT_IS_DEBUG_OVERLAY_VISIBLE,
-  updateIsDebugOverlayVisible: () => {}
-})
-// --------------------------------------------------------
+  updateIsDebugOverlayVisible: (isVisible) => set((state) => ({ isDebugOverlayVisible: isVisible }))
+}))
 
-
-export function WindowsStoreProvider({ children }) {
-  const [isDebugOverlayVisible, setIsDebugOverlayVisible] = useState<boolean>(DEFAULT_IS_DEBUG_OVERLAY_VISIBLE)
-  
-  const updateIsDebugOverlayVisible = (val) => setIsDebugOverlayVisible(val)
-
-  
-  return (
-    <WindowsStore.Provider
-      value={
-        {
-          isDebugOverlayVisible,
-          updateIsDebugOverlayVisible
-        }
-      }
-    >
-      { children }
-    </WindowsStore.Provider>
-  )
-} 
-
-export default WindowsStore
+export default useWindowsStore

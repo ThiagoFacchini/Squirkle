@@ -2,16 +2,17 @@ import React, { useRef, useMemo, useContext, Fragment } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { throttle } from 'lodash'
 
-import WindowsStore from './../../stores/windowsStore'
-import SceneStore from './../../stores/sceneStore'
+import useWindowsStore from './../../stores/windowsStore'
+import useSceneStore from './../../stores/sceneStore'
 
 
 const DEFAULT_UPDATE_INTERVAL = 1000
 
 const FPSWatcher = () => {
+    const isDebugOverlayVisible = useWindowsStore((state) => state.isDebugOverlayVisible)
+    const lastRecordedFPS = useSceneStore((state) => state.lastRecordedFPS)
+    const updateLastRecordedFPS = useSceneStore((state) => state.updateLastRecordedFPS)
 
-    const { isDebugOverlayVisible } = useContext(WindowsStore)
-    const { lastRecordedFPS, updateLastRecordedFPS } = useContext(SceneStore)
 
     const FPSRef = useRef()
     let lastTime = Date.now()
