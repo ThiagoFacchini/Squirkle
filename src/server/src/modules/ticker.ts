@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash'
+import Settings from './../settings/settings'
 
 type SubscriptionType = {
     id: string
@@ -8,8 +9,8 @@ type SubscriptionType = {
 console.log('[MODULE:TICKER]: Loaded.')
 
 // Configurations
-const dayTickAmount = 1440
-const intervalMS = 1000
+const dayTickAmount = Settings.calendar.dayTickAmount
+const intervalMS = Settings.socket.tickInterval
 
 let ticker
 let tickCount: number = 0
@@ -26,10 +27,12 @@ function tick() {
     }
 }
 
+
 function subscribe(subscriber: SubscriptionType) {
     console.log(`Subscribing client id: ${subscriber.id}`)
     subscribersArr.push(subscriber)
 }
+
 
 export function tickerSubscribe(subscriber: SubscriptionType) {
     if (!isEmpty(subscribersArr)) {
@@ -49,12 +52,15 @@ export function tickerSubscribe(subscriber: SubscriptionType) {
     subscribe(subscriber)
 }
 
+
 export function tickerUnsubscribe() {}
+
 
 export function tickerStart() {
     console.log('[MODULE:TICKER]: Started.')
     ticker = setInterval(tick, intervalMS)
 }
+
 
 export function tickerStop() {
     console.log('[MODULE:TICKER]: Stopped.')

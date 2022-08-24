@@ -3,6 +3,7 @@ import React, { useEffect, useContext, Fragment, ReactNode, useCallback } from '
 import useWindowsStore from './../../stores/windowsStore'
 import useSceneStore from './../../stores/sceneStore'
 import useSocketStore from './../../stores/socketStore'
+import usePlayerStore from './../../stores/playerStore'
 
 import styles from './styles.module.css'
 
@@ -15,6 +16,9 @@ const DebugOverlay = () => {
     const updateIsDebugOverlayVisible = useWindowsStore((state) => state.updateIsDebugOverlayVisible)
 
     const lastRecordedFPS = useSceneStore((state) => state.lastRecordedFPS)
+
+    const playerPosition = usePlayerStore((state) => state.position)
+    const playerLookDirection = usePlayerStore((state) => state.lookDirection)
 
     useEffect(() => {
         document.removeEventListener('keydown', toggleDebug)
@@ -33,36 +37,110 @@ const DebugOverlay = () => {
 
     const displayFPSWatcher = (): ReactNode => {
         return (
-            <div className={styles.fpsContainer}>
-                FPS: {lastRecordedFPS}
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    FPS: 
+                </div>
+                <div className={styles.content}>
+                    {lastRecordedFPS}
+                </div>
             </div>
         )
     }
+
 
     const displayPing = (): ReactNode => {
         return (
-            <div className={styles.pingContainer}>
-                PING: {lastRecordedPing}ms
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Ping:
+                </div>
+                <div className={styles.content}>
+                    {lastRecordedPing}ms
+                </div>
             </div>
         )
     }
+
 
     const displaySocketId = (): ReactNode => {
         return (
-            <div className={styles.socketIdContainer}>
-                Socket Id: {socketComponent.id}
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Socket Id: 
+                </div>
+                <div className={styles.content}>
+                    {socketComponent.id}
+                </div>
             </div>
         )
     }
+
 
     const displayTickCount = (): ReactNode => {
         return (
-            <div className={styles.tickCountContainer}>
-                Tick: { tickCount }
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    TickCount:
+                </div>
+                <div className={styles.content}>
+                    { tickCount }
+                </div>
             </div>
         )
     }
 
+
+    const displayTime = (): ReactNode => {
+        const hours: number = Math.floor(tickCount / 60)
+        const minutes = tickCount % 60
+        return (
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Time
+                </div>
+                <div className={styles.content}>
+                    {hours < 10 ? `0${hours}` : hours}:{ minutes < 10 ? `0${minutes}` : minutes}
+                </div>
+            </div>
+        )
+    }
+
+
+    const displayPlayerPosition = (): ReactNode => {
+        return (
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Player Position:
+                </div>
+                <div className={styles.content}>
+                    {`
+                        ${playerPosition.x.toFixed(4)},
+                        ${playerPosition.y.toFixed(4)},
+                        ${playerPosition.z.toFixed(4)}
+                    `}
+                </div>
+            </div>
+        )
+    }
+
+
+    const displayPlayerLookDirection = (): ReactNode => {
+        return (
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Look Direction:
+                </div>
+                <div className={styles.content}>
+                    {` 
+                        ${playerLookDirection.x.toFixed(4)},
+                        ${playerLookDirection.y.toFixed(4)},
+                        ${playerLookDirection.z.toFixed(4)}
+                    `}
+                </div>
+            </div>
+        )
+    }
 
     if (isDebugOverlayVisible) {
         return (
@@ -71,6 +149,9 @@ const DebugOverlay = () => {
                 { displayPing() }
                 { displaySocketId() }
                 { displayTickCount() }
+                { displayTime() }
+                { displayPlayerPosition() }
+                { displayPlayerLookDirection() }
             </div>
         )
     }

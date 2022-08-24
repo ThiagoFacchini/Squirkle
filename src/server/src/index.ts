@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import cors from 'cors'
 
 import { tickerStart, tickerSubscribe, tickerUnsubscribe } from './modules/ticker'
+import Settings from './settings/settings'
 
 const app = express()
 app.use(cors())
@@ -37,9 +38,13 @@ tickerStart()
 
 
 io.on('connection', (socket) => {
-    console.log(`User connect ${socket.id}`)
-    // socket.emit('tick', { message: 'testing 222'})
+    console.log(`[SERVER]: User connect ${socket.id}`)
 
+    socket.emit('serverConfigs', {
+        socket: {
+            tickInterval: Settings.socket.tickInterval
+        }
+    })
 
     socket.on('client', (data) => {
         console.log('Message received - topic: client - message:')

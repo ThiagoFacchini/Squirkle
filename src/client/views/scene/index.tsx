@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { useNavigate } from 'react-router-dom'
 
 import styles from './styles.module.css'
 
@@ -12,16 +13,26 @@ import R3FSun from '../../components/R3FSun'
 
 import DebugOverlay from './../../components/debugOverlay'
 import PingWatcher from './../../components/pingWatcher'
-import Ticker from './../../components/ticker'
+
+import useSocket from './../../stores/socketStore'
 
 const Scene = () => {
+    const navigate = useNavigate()
+    const isConnected = useSocket((state) => state.isConnected)
+
+    useEffect(() => {
+        if (!isConnected) {
+            navigate('/login')
+        }
+    },[isConnected])
+
     return (
         <div className={styles.container}>
 
             {/* Temporarily placed here */}
             <DebugOverlay />
             <PingWatcher />
-            <Ticker/>
+            {/* <Socket /> */}
             {/* Temporarily placed here */}
 
             <div className={styles.threeContainer }>
@@ -36,8 +47,8 @@ const Scene = () => {
                     <R3FSun />
                     <R3FAnimatedCube/>
 
-                    <mesh scale={[25, 25, 25]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={true}>
-                        <planeGeometry/>
+                    <mesh scale={[1, 1, 1]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={true}>
+                        <planeGeometry args={[10,10]} />
                         <meshPhongMaterial color={'green'}/>
                     </mesh>
                 </Canvas>

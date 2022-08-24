@@ -1,6 +1,9 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom'
 
+import Socket from './components/socket'
+import PlayerController from './components/playerController'
+
 import Home from './views/home'
 import Login from './views/login'
 import Loading from './views/loading'
@@ -19,6 +22,10 @@ const App = () => {
 
     return (
         <div className={styles.appContainer}>
+            {/* Controls in General */}
+            <Socket />
+            <PlayerController />
+
             <Routes>
                 <Route path='/' element={<Home />} /> 
                 <Route path='/login' element={<Login />} />
