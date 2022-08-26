@@ -1,14 +1,15 @@
 import React, { useEffect, Fragment } from 'react'
-import { Vector3 } from 'three'
+import * as THREE from 'three'
 
 import usePlayerStore from './../../stores/playerStore'
-
-let vector3 = new Vector3()
+import useCameraStore from './../../stores/cameraStore'
 
 const PlayerController = () => {
-  const position = usePlayerStore((state) => state.position)
-  const updatePosition = usePlayerStore((state) => state.updatePosition)
-  const lookDirection = usePlayerStore((state) => state.lookDirection)
+  const playerPosition = usePlayerStore((state) => state.position)
+  const updatePlayerPosition = usePlayerStore((state) => state.updatePosition)
+
+  const cameraDirection = useCameraStore((state) => state.direction)
+  
   
   useEffect(() => {
     document.removeEventListener('keydown', onKeyDown)
@@ -24,41 +25,43 @@ const PlayerController = () => {
 
 
   const onKeyDown = (evt: KeyboardEvent) => {
+    const positionVec = new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
+    const directionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+
     switch (evt.key) {
       case 'w' || 'W':
-        // vector3 = lookDirection
-        // vector3.z = vector3.z - 1
-        // vector3.y = vector3.y
-        // updatePosition(vector3)
+        positionVec.add(directionVec).multiplyScalar(1)
 
-        updatePosition({
-          x: position.x,
-          y: position.y,
-          z: position.z -1
+        updatePlayerPosition({
+          x: positionVec.x,
+          y: positionVec.y,
+          z: positionVec.z
         })
         return
       
       case 's' || 'S':
-        updatePosition({
-          x: position.x,
-          y: position.y,
-          z: position.z +1
+        positionVec.sub(directionVec).multiplyScalar(1)
+
+        updatePlayerPosition({
+          x: positionVec.x,
+          y: positionVec.y,
+          z: positionVec.z
         })
         return
 
       case 'a' || 'A':
-        updatePosition({
-          x: position.x -1,
-          y: position.y,
-          z: position.z
+        updatePlayerPosition({
+          x: playerPosition.x -1,
+          y: playerPosition.y,
+          z: playerPosition.z
         })
         return
 
       case 'd' || 'D':
-        updatePosition({
-          x: position.x +1,
-          y: position.y,
-          z: position.z
+        updatePlayerPosition({
+          x: playerPosition.x +1,
+          y: playerPosition.y,
+          z: playerPosition.z
         })
         return
     }

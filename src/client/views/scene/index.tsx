@@ -7,7 +7,7 @@ import styles from './styles.module.css'
 import R3FFpsWatcher from '../../components/R3FFpsWatcher'
 import R3FAxisHelper from '../../components/R3FAxisHelper'
 import R3FGridHelper from '../../components/R3FGridHelper'
-import R3FAnimatedCube from '../../components/R3FAnimatedCube'
+import R3FPlayer from '../../components/R3FPlayer'
 import R3FCameraOrbitController from '../../components/R3FCameraOrbitControlller'
 import R3FSun from '../../components/R3FSun'
 
@@ -45,7 +45,7 @@ const Scene = () => {
                     {/* Production Components */}
                     <R3FCameraOrbitController />
                     <R3FSun />
-                    <R3FAnimatedCube/>
+                    <R3FPlayer/>
 
                     <mesh scale={[1, 1, 1]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={true}>
                         <planeGeometry args={[10,10]} />

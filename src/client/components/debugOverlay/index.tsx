@@ -4,6 +4,7 @@ import useWindowsStore from './../../stores/windowsStore'
 import useSceneStore from './../../stores/sceneStore'
 import useSocketStore from './../../stores/socketStore'
 import usePlayerStore from './../../stores/playerStore'
+import useCameraStore from './../../stores/cameraStore'
 
 import styles from './styles.module.css'
 
@@ -18,7 +19,9 @@ const DebugOverlay = () => {
     const lastRecordedFPS = useSceneStore((state) => state.lastRecordedFPS)
 
     const playerPosition = usePlayerStore((state) => state.position)
-    const playerLookDirection = usePlayerStore((state) => state.lookDirection)
+
+    const cameraDirection = useCameraStore((state) => state.direction)
+    const cameraPosition = useCameraStore((state) => state.position)
 
     useEffect(() => {
         document.removeEventListener('keydown', toggleDebug)
@@ -125,18 +128,27 @@ const DebugOverlay = () => {
     }
 
 
-    const displayPlayerLookDirection = (): ReactNode => {
+    const displayCameraDirection = (): ReactNode => {
         return (
             <div className={styles.sectionContainer}>
                 <div className={styles.label}>
-                    Look Direction:
+                    Cam Direction:
                 </div>
                 <div className={styles.content}>
-                    {` 
-                        ${playerLookDirection.x.toFixed(4)},
-                        ${playerLookDirection.y.toFixed(4)},
-                        ${playerLookDirection.z.toFixed(4)}
-                    `}
+                    {`${cameraDirection.x.toFixed(2)}, ${cameraDirection.y.toFixed(2)}, ${cameraDirection.z.toFixed(2)}`}
+                </div>
+            </div>
+        )
+    }
+
+    const displayCameraPosition = (): ReactNode => {
+        return (
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Cam Position:
+                </div>
+                <div className={styles.content}>
+                    {`${cameraPosition.x.toFixed(2)}, ${cameraPosition.y.toFixed(2)}, ${cameraPosition.z.toFixed(2)}`}
                 </div>
             </div>
         )
@@ -151,7 +163,8 @@ const DebugOverlay = () => {
                 { displayTickCount() }
                 { displayTime() }
                 { displayPlayerPosition() }
-                { displayPlayerLookDirection() }
+                { displayCameraDirection() }
+                { displayCameraPosition() }
             </div>
         )
     }
