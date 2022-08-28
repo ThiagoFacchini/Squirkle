@@ -3,9 +3,14 @@ import http from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 
-import { tickerStart, tickerSubscribe, tickerUnsubscribe } from './modules/ticker'
 import Settings from './settings/settings'
 
+import Ticker from './modules/ticker'
+import CommandLine from './modules/commands'
+import Timer from './modules/Timer'
+
+
+// Server initialization
 const app = express()
 app.use(cors())
 const server = http.createServer(app)
@@ -16,6 +21,28 @@ const corsWhitelist = [
     'http://10.76.254.24:8080',
     'http://100.64.29.20:8080'
 ]
+
+
+// Modules initialization
+Ticker.start()
+
+// Subscribing the Timer system to ticker
+Ticker.subscribe({ id: 'Time', cb: Timer.processTick })
+
+// Linking Ticker to the Timer system
+Timer.setTime(Ticker.set)
+
+// Registering Commands
+CommandLine.registerCommandResponse((response, socketId) => {
+    console.log(response)
+    console.log(socketId)
+    io.to(socketId).emit('commandLine', response)
+})
+
+CommandLine.register(Timer.commands, 'Timer', ['/time'])
+CommandLine.register(Ticker.commands, 'Ticker', ['/tick'])
+
+
 
 const io = new Server(server, {
     cors: {
@@ -33,8 +60,6 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 })
-
-tickerStart()
 
 
 io.on('connection', (socket) => {
@@ -57,19 +82,24 @@ io.on('connection', (socket) => {
     })
 
     socket.on('ping', () => {
-        // console.log('pinged')
         socket.emit('pong', {})
     })
 
+
+    socket.on('commandLine', (data) => {
+        CommandLine.process(data, socket.id)
+    })
+
     
-    tickerSubscribe({ id: 'SocketIO', cb: (tickCount) => { 
-        // console.log('ticking to clients')
-        // socket.emit('tick', { message: tickCount })
+    Ticker.subscribe({ id: 'SocketIO', cb: (tickCount) => { 
         io.sockets.emit('tick', { message: tickCount })
     }})
 
 })
 
+
 server.listen(3000, () => {
     console.log('[SERVER] - Running at port 3000')
 })
+
+

@@ -8,7 +8,10 @@ import useWindowsStore from './../../stores/windowsStore'
 import usePlayerStore from './../../stores/playerStore'
 import useCameraStore from './../../stores/cameraStore'
 
-let controlsTargetV3 = new THREE.Vector3()
+let controlsTgtVec = new THREE.Vector3()
+let controlsTgt2Vec = new THREE.Vector3()
+let positionVec = new THREE.Vector3()
+let directionVec = new THREE.Vector3()
 let cameraDirection = new THREE.Vector3()
 let controls, tween
 
@@ -17,13 +20,16 @@ const CameraOrbitController = () => {
     const isDebugOverlayVisible = useWindowsStore((state) => state.isDebugOverlayVisible)
 
     const playerPosition = usePlayerStore((state) => state.position)
+    const playerRotation = usePlayerStore((state) => state.rotation)
 
     const updateCameraDirection = useCameraStore((state => state.updateDirection))
     const updateCameraPosition = useCameraStore((state) => state.updatePosition)
+    const updateCameraControlsTarget = useCameraStore((state) => state.updateControlsTarget)
 
     const { camera, gl } = useThree()
 
-
+    // Initialise the camera component, by setting isInistialised to true, and pushes the camera 
+    // direction to the store
     useEffect(() => {
         if (!isInitialised) {
             setIsInitialised(true)
@@ -36,7 +42,9 @@ const CameraOrbitController = () => {
         }
     },[isInitialised])
 
-
+    
+    // Create orbit controls, add a listener to monitor changes to it and set the targe to the 
+    //player
     useEffect(() => {
         controls = new OrbitControls(camera, gl.domElement)
         controls.addEventListener('change', onChange);
@@ -60,55 +68,65 @@ const CameraOrbitController = () => {
     }, [camera, gl])
 
 
-    useEffect(() => {
-        if (isDebugOverlayVisible) {
-            controls.enablePan = true
-            controls.maxDistance = 30
-            controls.minDistance = 1
-        } else {
-            controls.enablePan = false
-            controls.maxDistance = 5.83
-            controls.minDistance = 1            
-            controls.minPolarAngle = 0
-            controls.maxPolarAngle = 1.5
-        }
-        controls.update()
-    },[isDebugOverlayVisible])
+    // Change the orbit controls properties if it is in debug mode to give debug freem to the 
+    // camera
+    // useEffect(() => {
+    //     if (isDebugOverlayVisible) {
+    //         controls.enablePan = true
+    //         controls.maxDistance = 30
+    //         controls.minDistance = 1
+    //     } else {
+    //         controls.enablePan = false
+    //         controls.maxDistance = 5.83
+    //         controls.minDistance = 1            
+    //         controls.minPolarAngle = 0
+    //         controls.maxPolarAngle = 1.5
+    //     }
+    //     controls.update()
+    // },[isDebugOverlayVisible])
 
 
     useEffect(() => {
-        const incrementalVec = {
-            x: camera.position.x - playerPosition.x,
-            y: camera.position.y - playerPosition.y,
-            z: camera.position.z - playerPosition.z
-        }
         if (camera && isInitialised) {
+            positionVec.set(playerPosition.x, playerPosition.y, playerPosition.z)
+            directionVec.set(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+            positionVec.addScaledVector(directionVec, -5)
+
+            controlsTgtVec.add(directionVec)
+
             tween = new TWEEN.Tween({
-                x: camera.position.x,
-                y: camera.position.y,
-                z: camera.position.z
+                posX: camera.position.x,
+                posY: camera.position.y,
+                posZ: camera.position.z,
+
+                tgtX: controls.target.x,
+                tgtY: controls.target.y,
+                tgtZ: controls.target.z
             }).to({
-                x: playerPosition.x, 
-                y: playerPosition.y +3,
-                z: playerPosition.z +5 
+                posX: positionVec.x, 
+                posY: camera.position.y,
+                posZ: positionVec.z,
+
+                tgtX: controlsTgtVec.x,
+                tgtY: controlsTgtVec.y,
+                tgtZ: controlsTgtVec.z
             }, 1000)
+
             .onUpdate((tweenedObj) => {
-                camera.position.x = tweenedObj.x,
-                camera.position.y = tweenedObj.y
-                camera.position.z = tweenedObj.z
+                camera.position.x = tweenedObj.posX,
+                camera.position.y = camera.position.y
+                camera.position.z = tweenedObj.posZ
                 camera.updateProjectionMatrix()
 
-                controlsTargetV3.x = tweenedObj.x,
-                controlsTargetV3.y = tweenedObj.y -3
-                controlsTargetV3.z = tweenedObj.z -5
-                controls.target = controlsTargetV3
-                controls.update()
+                controlsTgt2Vec.set(tweenedObj.tgtX, playerPosition.y, tweenedObj.tgtZ)
+                controls.target = controlsTgt2Vec
+                // controls.update()
 
             })
             .onComplete(() => resetTween())
             tween.start()
         }
-    },[playerPosition])
+    },[playerPosition, playerRotation])
 
 
     useFrame((state, delta) => {
@@ -128,6 +146,7 @@ const CameraOrbitController = () => {
     }
 
     const resetTween = () => {
+        updateCameraControlsTarget({ x: controls.target.x, y: controls.target.y, z: controls.target.z})
         tween = null
     }
 

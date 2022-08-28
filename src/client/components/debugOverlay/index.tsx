@@ -19,6 +19,7 @@ const DebugOverlay = () => {
     const lastRecordedFPS = useSceneStore((state) => state.lastRecordedFPS)
 
     const playerPosition = usePlayerStore((state) => state.position)
+    const playerRotation = usePlayerStore((state) => state.rotation)
 
     const cameraDirection = useCameraStore((state) => state.direction)
     const cameraPosition = useCameraStore((state) => state.position)
@@ -128,6 +129,24 @@ const DebugOverlay = () => {
     }
 
 
+    const displayPlayerRotation = (): ReactNode => {
+        return (
+            <div className={styles.sectionContainer}>
+                <div className={styles.label}>
+                    Player Rotation:
+                </div>
+                <div className={styles.content}>
+                    {`
+                        ${playerRotation.x.toFixed(4)},
+                        ${playerRotation.y.toFixed(4)},
+                        ${playerRotation.z.toFixed(4)}
+                    `}
+                </div>
+            </div>
+        )
+    }
+
+
     const displayCameraDirection = (): ReactNode => {
         return (
             <div className={styles.sectionContainer}>
@@ -163,6 +182,7 @@ const DebugOverlay = () => {
                 { displayTickCount() }
                 { displayTime() }
                 { displayPlayerPosition() }
+                { displayPlayerRotation() }
                 { displayCameraDirection() }
                 { displayCameraPosition() }
             </div>

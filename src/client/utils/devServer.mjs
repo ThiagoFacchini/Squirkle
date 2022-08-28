@@ -27,9 +27,11 @@ esBuildDevServer.start(
         platform: 'browser',
         target: ['chrome58', 'safari11'],
         loader: { 
-            '.png' : "dataurl", 
+            '.png': "dataurl", 
             '.hdr': 'dataurl', 
-            '.jpg': 'dataurl' 
+            '.jpg': 'dataurl',
+            '.otf': 'dataurl',
+            '.ttf': 'dataurl'
         },
         plugins: [
             stylePlugin({

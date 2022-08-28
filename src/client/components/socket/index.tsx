@@ -30,6 +30,10 @@ const Socket = () => {
     socketComponent.on('serverConfigs', (data) => {
       updateTickInterval(data.socket.tickInterval)
     })
+
+    socketComponent.on('commandLine', (data) => {
+      console.log(data)
+    })
   }, [socketComponent])
   
   return <Fragment/>

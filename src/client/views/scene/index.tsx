@@ -7,12 +7,14 @@ import styles from './styles.module.css'
 import R3FFpsWatcher from '../../components/R3FFpsWatcher'
 import R3FAxisHelper from '../../components/R3FAxisHelper'
 import R3FGridHelper from '../../components/R3FGridHelper'
+import R3FCameraControlsHelper from '../../components/R3FCameraControlsHelper'
 import R3FPlayer from '../../components/R3FPlayer'
 import R3FCameraOrbitController from '../../components/R3FCameraOrbitControlller'
 import R3FSun from '../../components/R3FSun'
 
 import DebugOverlay from './../../components/debugOverlay'
 import PingWatcher from './../../components/pingWatcher'
+import CommandLine from './../../components/commandLine'
 
 import useSocket from './../../stores/socketStore'
 
@@ -32,7 +34,7 @@ const Scene = () => {
             {/* Temporarily placed here */}
             <DebugOverlay />
             <PingWatcher />
-            {/* <Socket /> */}
+            <CommandLine />
             {/* Temporarily placed here */}
 
             <div className={styles.threeContainer }>
@@ -41,6 +43,7 @@ const Scene = () => {
                     <R3FFpsWatcher />
                     <R3FAxisHelper />
                     <R3FGridHelper />
+                    <R3FCameraControlsHelper />
 
                     {/* Production Components */}
                     <R3FCameraOrbitController />

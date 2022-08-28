@@ -9,11 +9,13 @@ import usePlayerStore from '../../stores/playerStore'
 import useCameraStore from '../../stores/cameraStore'
 
 let positionTween, rotationTween
+let playerRotation = new THREE.Vector3()
 
 const Player = () => {
     const isDebugOverlayVisible = useWindowsStore((state) => state.isDebugOverlayVisible)
 
     const playerPosition = usePlayerStore((state) => state.position)
+    const updatePlayerRotation = usePlayerStore((state) => state.updateRotation)
 
     const cameraDirection = useCameraStore((state) => state.direction)
     const cameraPosition = useCameraStore((state) => state.position)
@@ -33,25 +35,16 @@ const Player = () => {
         if (!isInitialised) setIsInitialised(true)
     }, [isInitialised])
 
+
     // Updates the player rotation
     useEffect(() => {
         if (meshRef.current && isInitialised) {
             const mesh = meshRef.current
 
-            console.log('current rotation')
-            console.log(mesh.rotation.y)
             let yRotation = Math.atan2( 
                 (cameraPosition.x - meshRef.current.position.x),
                 (cameraPosition.z - meshRef.current.position.z)
             )
-
-            if (yRotation === Math.PI || (yRotation * -1) === Math.PI) {
-                console.log('Matches Pi, ignoring')
-                yRotation = 0
-            } 
-
-            console.log('final rotation')
-            console.log(yRotation)
 
             rotationTween = new TWEEN.Tween({
                 y: mesh.rotation.y,
@@ -72,17 +65,19 @@ const Player = () => {
     }, [playerPosition, meshRef])
 
 
-
     useFrame((state, delta) => {
         if (rotationTween) rotationTween.update()
         if (positionTween) positionTween.update()
     })
 
+
     const completedRotation = () => {
         rotationTween = null
-
+        
         if (meshRef.current) {
             const mesh = meshRef.current
+            mesh.getWorldDirection(playerRotation)
+            updatePlayerRotation(playerRotation)
 
             positionTween = new TWEEN.Tween({
                 x: mesh.position.x,
@@ -115,7 +110,7 @@ const Player = () => {
             castShadow={true}
         >
             <boxGeometry args={[1, 2, 1]}/>
-            <meshPhongMaterial color={'white'}/>
+            <meshPhongMaterial color={'white'} wireframe/>
 
             <mesh position={[0, .75, -0.5]}>
                 <boxGeometry args={[.2,.2,.2]}/>

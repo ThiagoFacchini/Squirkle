@@ -1,0 +1,24 @@
+@font-face {
+    font-family: rpgfont;
+    src: url('../../assets/t4cbeaulieux.ttf');
+}
+
+.container {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    height: 40px;
+    background-color: rgba(30, 30, 30, 0.5);
+    z-index: 999;
+    padding:5px;
+
+    & .commandLine {
+        font-family: rpgfont;
+        font-size: 25px;;
+        border: none;
+        background-color: transparent;
+        color: white;
+        outline: none;
+        width: 400px;
+    }
+}
