@@ -110,7 +110,7 @@ const Player = () => {
             castShadow={true}
         >
             <boxGeometry args={[1, 2, 1]}/>
-            <meshPhongMaterial color={'white'} wireframe/>
+            <meshPhongMaterial color={'white'} wireframe={isDebugOverlayVisible} />
 
             <mesh position={[0, .75, -0.5]}>
                 <boxGeometry args={[.2,.2,.2]}/>

@@ -26,19 +26,22 @@ const LastMessages = () => {
     },[isInitialised])
 
 
+    /**
+     * This effect triggers the fadeout over the messages after a new message arrives if the command
+     * line is NOT active.
+     */
     useEffect(() => {
         if (isInitialised) {
-            if (isVisible) {
-                console.log('setting timeout')
-                setTimeout(() => {
-                    console.log('running timeout')
-                    setIsVisible(false)
-                }, DISPLAY_TIME)
+            if (isVisible && !isCommandLineActive) {
+                fadeOut()
             }
         }
-    }, [isInitialised, isVisible])
+    }, [isInitialised, isVisible, isCommandLineActive])
 
 
+    /**
+     * This effect displays the messages if a new message arrives
+     */
     useEffect(() => {
         if (isInitialised) {
             if (!isVisible) {
@@ -49,13 +52,26 @@ const LastMessages = () => {
     }, [messages])
 
 
+    /**
+     * This effect displays the messages if the command line becomes active and triggers fadeout if
+     * the command line isn't active.
+     */
+    useEffect(() => {
+        if (isInitialised) {
+            isCommandLineActive ? setIsVisible(true) : fadeOut()
+        }
+    }, [isInitialised, isCommandLineActive])
 
-    // useEffect(() => {
-    //     if (isVisible) {
-    //         clearTimeout(timeout)
-    //         containerStyle = classNames(styles.container)
-    //     }
-    // }, [isVisible])
+
+    /**
+     * Fades the message container out.
+     */
+    const fadeOut = () => {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+            setIsVisible(false)
+        }, DISPLAY_TIME)
+    }
 
 
     const renderMessages = () => {
@@ -81,7 +97,6 @@ const LastMessages = () => {
 
     let containerStyle = classNames(styles.container)
     if (!isVisible) containerStyle = classNames(styles.container, styles.invisible)
-    console.log(containerStyle)
  
 
     return (

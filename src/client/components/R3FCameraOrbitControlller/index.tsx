@@ -92,7 +92,12 @@ const CameraOrbitController = () => {
             directionVec.set(cameraDirection.x, cameraDirection.y, cameraDirection.z)
             positionVec.addScaledVector(directionVec, -5)
 
-            controlsTgtVec.add(directionVec)
+            // controlsTgtVec.add(directionVec)
+            // controlsTgtVec.addScaledVector(directionVec, +5)
+
+            controlsTgtVec.set( directionVec.x, directionVec.y, directionVec.z )
+            controlsTgtVec.addScaledVector(directionVec, 1)
+            
 
             tween = new TWEEN.Tween({
                 posX: camera.position.x,
