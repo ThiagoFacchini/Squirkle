@@ -29,7 +29,7 @@ const DEFAULT_LAST_RECORDED_PING = 0
 const DEFAULT_TICK_COUNT = 0
 // --------------------------------------------------------
 
-export const useSocketStore = create<SocketStoreType>()((set) => ({
+export const useSocketStore = create<SocketStoreType>((set) => ({
   socketComponent: DEFAULT_SOCKET_COMPONENT,
   isConnected: DEFAULT_IS_CONNECTED,
   lastRecordedPing: DEFAULT_LAST_RECORDED_PING,

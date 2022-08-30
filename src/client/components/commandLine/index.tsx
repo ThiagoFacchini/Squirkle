@@ -46,7 +46,7 @@ const CommandLine = () => {
     if (isActive) {
         return (
             <div className={ styles.container }>
-                <input type="text" ref={ commandLineRef } id={'commandLine'} className={styles.commandLine} autoFocus/>
+                <input type="text" ref={ commandLineRef } id={'commandLine'} className={styles.commandLine} autoFocus autoComplete='off'/>
             </div>
         )
     }

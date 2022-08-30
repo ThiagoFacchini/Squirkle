@@ -26,7 +26,7 @@ const DEFAULT_IS_DEBUG_OVERLAY_VISIBLE = localStorage.getItem(`${LS_STORE_KEY}${
 const DEFAULT_IS_COMMAND_LINE_ACTIVE = false
 // --------------------------------------------------------
 
-export const useWindowsStore = create<WindowsStoreType>()((set) => ({
+export const useWindowsStore = create<WindowsStoreType>((set) => ({
   isDebugOverlayVisible: DEFAULT_IS_DEBUG_OVERLAY_VISIBLE,
   isCommandLineActive: DEFAULT_IS_COMMAND_LINE_ACTIVE,
   updateIsDebugOverlayVisible: (isVisible) => {

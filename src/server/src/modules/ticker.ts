@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 import Settings from './../settings/settings'
-import { COMMANDS_RESPONSES } from '../definitions/responses'
+import { COMMANDS_RESPONSES, SENDER } from '../definitions/enums'
 
 type SubscriptionType = {
     id: string
@@ -91,21 +91,46 @@ const tickerSet = (newTickCount: number) => {
 
 const commands = (commandArgs: string) => {
     const decodedCommand = commandArgs.split(" ")
+    const command = decodedCommand[0].toLowerCase()
 
-    if (decodedCommand[0] === 'set') {
+    if (command === 'set') {
         const newTickCount = parseInt(decodedCommand[1])
         tickCount = newTickCount
-        return { status: COMMANDS_RESPONSES.OK, message: `TickCount set to ${newTickCount}`}
+        return { 
+            status: COMMANDS_RESPONSES.OK,
+            message: `TickCount set to ${newTickCount}`,
+            sender: SENDER.SERVER
+        }
 
-    } else if (decodedCommand[0] === 'stop') {
+    } else if (command === 'stop') {
         tickerStop()
-        return { status: COMMANDS_RESPONSES.OK, message: `Ticker stopped.`}
+        return { 
+            status: COMMANDS_RESPONSES.OK,
+            message: `Ticker stopped.`,
+            sender: SENDER.SERVER
+        }
 
-    } else if (decodedCommand[0] === 'start') {
+    } else if (command === 'start') {
         tickerStart()
-        return { status: COMMANDS_RESPONSES.OK, message: `Ticker started.`}
+        return { 
+            status: COMMANDS_RESPONSES.OK,
+            message: `Ticker started.`,
+            sender: SENDER.SERVER
+        }
+
+    } else if (command.toLowerCase() === 'help') {
+        return {
+            status: COMMANDS_RESPONSES.OK,
+            message: `----- set | stop | start`,
+            sender: SENDER.SERVER
+        }
+
     } else {
-        return { status: COMMANDS_RESPONSES.ERROR, message: `command ${decodedCommand[0]} not recognised.`}
+        return { 
+            status: COMMANDS_RESPONSES.ERROR,
+            message: `command ${decodedCommand[0]} not recognised.`,
+            sender: SENDER.SERVER
+        }
     }
 }
 

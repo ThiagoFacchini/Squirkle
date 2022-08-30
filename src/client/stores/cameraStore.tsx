@@ -27,7 +27,7 @@ const DEFAULT_CAMERA_DIRECTION = { x:0, y:1, z:0 }
 const DEFAULT_CONTROLS_TARGET = { x:0, y:0, z:0 }
 // --------------------------------------------------------
 
-export const useCameraStore = create<CameraStoreType>()((set) => ({
+export const useCameraStore = create<CameraStoreType>((set) => ({
   position: DEFAULT_CAMERA_POSITION,
   direction: DEFAULT_CAMERA_DIRECTION,
   controlsTarget: DEFAULT_CONTROLS_TARGET,

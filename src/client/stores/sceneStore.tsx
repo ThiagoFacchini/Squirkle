@@ -15,7 +15,7 @@ interface SceneStoreType {
 const DEFAULT_LAST_RECORDED_FPS = 0
 // --------------------------------------------------------
 
-export const useSceneStore = create<SceneStoreType>()((set) => ({
+export const useSceneStore = create<SceneStoreType>((set) => ({
   lastRecordedFPS: DEFAULT_LAST_RECORDED_FPS,
   updateLastRecordedFPS: (fps) => set((state) => ({ lastRecordedFPS: fps }))
 }))

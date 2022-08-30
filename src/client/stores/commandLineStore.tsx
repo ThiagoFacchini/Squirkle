@@ -16,7 +16,7 @@ interface CommandLineStoreType {
 const DEFAULT_IS_ACTIVE = false
 // --------------------------------------------------------
 
-export const useCommandLineStore = create<CommandLineStoreType>()((set) => ({
+export const useCommandLineStore = create<CommandLineStoreType>((set) => ({
   isActive: DEFAULT_IS_ACTIVE,
   updateIsActive: (isActive) => set((state) => ({ isActive: isActive }))
 }))

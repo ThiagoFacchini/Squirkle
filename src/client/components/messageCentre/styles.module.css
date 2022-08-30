@@ -1,0 +1,10 @@
+.container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    left: 25%;
+    bottom: 10px;
+    z-index: 999;
+    pointer-events: none;
+}

@@ -32,7 +32,7 @@ const DEFAULT_PASSWORD = localStorage.getItem(`${LS_STORE_KEY}${LS_PASSWORD}`) |
 const DEFAULT_SERVER_ADDRESS = localStorage.getItem(`${LS_STORE_KEY}${LS_SERVER_ADDRESS}`) || 'localhost:3000'
 // --------------------------------------------------------
 
-export const useLoginStore = create<LoginStoreType>()((set) => ({
+export const useLoginStore = create<LoginStoreType>((set) => ({
   username: DEFAULT_USERNAME,
   password: DEFAULT_PASSWORD,
   serverAddress: DEFAULT_SERVER_ADDRESS,

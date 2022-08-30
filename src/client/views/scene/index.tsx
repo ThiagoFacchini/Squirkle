@@ -14,7 +14,7 @@ import R3FSun from '../../components/R3FSun'
 
 import DebugOverlay from './../../components/debugOverlay'
 import PingWatcher from './../../components/pingWatcher'
-import CommandLine from './../../components/commandLine'
+import MessageCentre from './../../components/messageCentre'
 
 import useSocket from './../../stores/socketStore'
 
@@ -34,7 +34,7 @@ const Scene = () => {
             {/* Temporarily placed here */}
             <DebugOverlay />
             <PingWatcher />
-            <CommandLine />
+            <MessageCentre />
             {/* Temporarily placed here */}
 
             <div className={styles.threeContainer }>

@@ -34,8 +34,6 @@ Timer.setTime(Ticker.set)
 
 // Registering Commands
 CommandLine.registerCommandResponse((response, socketId) => {
-    console.log(response)
-    console.log(socketId)
     io.to(socketId).emit('commandLine', response)
 })
 

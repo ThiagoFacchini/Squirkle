@@ -1,5 +1,5 @@
 import Settings from '../settings/settings'
-import { COMMANDS_RESPONSES } from '../definitions/responses'
+import { COMMANDS_RESPONSES, SENDER } from '../definitions/enums'
 
 console.log('[MODULE:TIMER]: Loaded.')
 
@@ -30,38 +30,74 @@ const processTick = (tickCount: number) => {
 
 const commands = (commandArgs: string) => {
     const decodedCommand = commandArgs.split(" ")
-
-    if (decodedCommand[0] === 'set') {
-        switch (decodedCommand[1]) {
+    const command = decodedCommand[0].toLowerCase()
+    console.log(`command is ${command}`)
+    if (command === 'set') {
+        switch (decodedCommand[1].toLowerCase()) {
             case 'day':
                 setTimeCb(dayTicks)
                 console.log('[MODULE:TIMER]: Time set to day.')
-                return { status: COMMANDS_RESPONSES.OK, message: 'Time set to day.'}
+                return { 
+                    status: COMMANDS_RESPONSES.OK,
+                    message: 'Time set to day.',
+                    sender: SENDER.SERVER
+                }
 
             case 'night':
                 setTimeCb(nightTicks)
                 console.log('[MODULE:TIMER]: Time set to night.')
-                return { status: COMMANDS_RESPONSES.OK, message: 'Time set to night.'}
+                return { 
+                    status: COMMANDS_RESPONSES.OK, 
+                    message: 'Time set to night.',
+                    sender: SENDER.SERVER
+                }
             
             case 'dawn':
                 setTimeCb(dawnTicks)
                 console.log('[MODULE:TIMER]: Time set to dawn.')
-                return { status: COMMANDS_RESPONSES.OK, message: 'Time set to dawn.'}
+                return { 
+                    status: COMMANDS_RESPONSES.OK,
+                    message: 'Time set to dawn.',
+                    sender: SENDER.SERVER
+                }
             
             case 'dusk':
                 setTimeCb(duskTicks)
                 console.log('[MODULE:TIMER]: Time set to dusk.')
-                return { status: COMMANDS_RESPONSES.OK, message: 'Time set to dusk.'}
+                return { 
+                    status: COMMANDS_RESPONSES.OK,
+                    message: 'Time set to dusk.',
+                    sender: SENDER.SERVER
+                }
 
             default:
-                return { status: 'ERROR', message: `command ${decodedCommand[1]} not recognised.`}
+                return { 
+                    status: 'ERROR',
+                    message: `Command ${decodedCommand[1]} not recognised.`,
+                    sender: SENDER.SERVER
+                }
         }
 
-    } else if (decodedCommand[0] === 'get') {
-        return { status: COMMANDS_RESPONSES.OK, message: `It is ${friendlyHours}:${friendlyMinutes}.`}
+    } else if (command.toLowerCase() === 'get') {
+        return { 
+            status: COMMANDS_RESPONSES.OK,
+            message: `It is ${friendlyHours}:${friendlyMinutes}.`,
+            sender: SENDER.SERVER
+        }
+
+    } else if (command.toLowerCase() === 'help') {
+        return {
+            status: COMMANDS_RESPONSES.OK,
+            message: `----- get | set`,
+            sender: SENDER.SERVER
+        }
 
     } else {
-        return { status: COMMANDS_RESPONSES.ERROR, nmessage: `command ${decodedCommand[0]} not recognised.`}
+        return { 
+            status: COMMANDS_RESPONSES.ERROR,
+            message: `Command ${decodedCommand[0]} not recognised.`,
+            sender: SENDER.SERVER
+        }
     }
 }
 

@@ -1,7 +1,9 @@
 import React, { useEffect, useContext, Fragment } from 'react'
+import { COMMANDS_RESPONSES } from '../../../server/src/definitions/enums'
 
 import useSocketStore from '../../stores/socketStore'
 import useConfigsStore from '../../stores/configsStore'
+import useMessagesStore from '../../stores/messageStore'
 
 const Socket = () => {
 
@@ -12,6 +14,9 @@ const Socket = () => {
   const resetSocketComponent = useSocketStore((state) => state.resetSocketComponent)
 
   const updateTickInterval = useConfigsStore((state) => state.updateTickInterval)
+
+  const addMessage = useMessagesStore((state) => state.addMessage)
+
 
   useEffect(() => {
     socketComponent.on('connect', () => {
@@ -30,9 +35,9 @@ const Socket = () => {
     socketComponent.on('serverConfigs', (data) => {
       updateTickInterval(data.socket.tickInterval)
     })
-
+    
     socketComponent.on('commandLine', (data) => {
-      console.log(data)
+      addMessage(data)
     })
   }, [socketComponent])
   

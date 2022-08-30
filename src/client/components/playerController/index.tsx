@@ -3,12 +3,15 @@ import * as THREE from 'three'
 
 import usePlayerStore from './../../stores/playerStore'
 import useCameraStore from './../../stores/cameraStore'
+import useCommandLineStore from '../../stores/commandLineStore'
 
 const PlayerController = () => {
   const playerPosition = usePlayerStore((state) => state.position)
   const updatePlayerPosition = usePlayerStore((state) => state.updatePosition)
 
   const cameraDirection = useCameraStore((state) => state.direction)
+
+  const isCommandLineActive = useCommandLineStore((state) => state.isActive)
   
   
   useEffect(() => {
@@ -27,6 +30,8 @@ const PlayerController = () => {
   const onKeyDown = (evt: KeyboardEvent) => {
     const positionVec = new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
     const directionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+
+    if (isCommandLineActive) return
 
     switch (evt.key) {
       case 'w' || 'W':

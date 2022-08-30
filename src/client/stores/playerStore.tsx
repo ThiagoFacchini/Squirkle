@@ -25,7 +25,7 @@ const DEFAULT_PLAYER_POSITION = { x: 0, y: 1, z: 0 }
 const DEFAULT_PLAYER_ROTATION = { x: 0, y: 0, z: 0 }
 // --------------------------------------------------------
 
-export const usePlayerStore = create<PlayerStoreType>()((set) => ({
+export const usePlayerStore = create<PlayerStoreType>((set) => ({
   position: DEFAULT_PLAYER_POSITION,
   rotation: DEFAULT_PLAYER_ROTATION,
   updatePosition: (position) => set((state) => ({ position: position })),
