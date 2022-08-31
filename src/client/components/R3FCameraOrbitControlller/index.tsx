@@ -8,12 +8,12 @@ import useWindowsStore from './../../stores/windowsStore'
 import usePlayerStore from './../../stores/playerStore'
 import useCameraStore from './../../stores/cameraStore'
 
-let controlsTgtVec = new THREE.Vector3()
 let controlsTgt2Vec = new THREE.Vector3()
 let positionVec = new THREE.Vector3()
 let directionVec = new THREE.Vector3()
 let cameraDirection = new THREE.Vector3()
 let controls, tween
+
 
 const CameraOrbitController = () => {
     const [isInitialised, setIsInitialised] = useState(false)
@@ -28,8 +28,10 @@ const CameraOrbitController = () => {
 
     const { camera, gl } = useThree()
 
-    // Initialise the camera component, by setting isInistialised to true, and pushes the camera 
-    // direction to the store
+    /** 
+     * Initialise the camera component, by setting isInistialised to true, and pushes the camera 
+     * direction to the store.
+    */ 
     useEffect(() => {
         if (!isInitialised) {
             setIsInitialised(true)
@@ -43,8 +45,10 @@ const CameraOrbitController = () => {
     },[isInitialised])
 
     
-    // Create orbit controls, add a listener to monitor changes to it and set the targe to the 
-    //player
+    /**
+     * Create orbit controls, add a listener to monitor changes to it and set the target to the 
+     * player.
+    */    
     useEffect(() => {
         controls = new OrbitControls(camera, gl.domElement)
         controls.addEventListener('change', onChange);
@@ -68,8 +72,10 @@ const CameraOrbitController = () => {
     }, [camera, gl])
 
 
-    // Change the orbit controls properties if it is in debug mode to give debug freem to the 
-    // camera
+    /**
+     * Change the orbit controls properties if it is in debug mode to give debug freem to the 
+     * camera.
+     */
     // useEffect(() => {
     //     if (isDebugOverlayVisible) {
     //         controls.enablePan = true
@@ -86,35 +92,25 @@ const CameraOrbitController = () => {
     // },[isDebugOverlayVisible])
 
 
+    /**
+     * Updates the camera position & controls target once the player moves.
+     */
     useEffect(() => {
         if (camera && isInitialised) {
             positionVec.set(playerPosition.x, playerPosition.y, playerPosition.z)
             directionVec.set(cameraDirection.x, cameraDirection.y, cameraDirection.z)
             positionVec.addScaledVector(directionVec, -5)
-
-            // controlsTgtVec.add(directionVec)
-            // controlsTgtVec.addScaledVector(directionVec, +5)
-
-            controlsTgtVec.set( directionVec.x, directionVec.y, directionVec.z )
-            controlsTgtVec.addScaledVector(directionVec, 1)
             
-
             tween = new TWEEN.Tween({
                 posX: camera.position.x,
-                posY: camera.position.y,
                 posZ: camera.position.z,
-
                 tgtX: controls.target.x,
-                tgtY: controls.target.y,
                 tgtZ: controls.target.z
             }).to({
                 posX: positionVec.x, 
-                posY: camera.position.y,
                 posZ: positionVec.z,
-
-                tgtX: controlsTgtVec.x,
-                tgtY: controlsTgtVec.y,
-                tgtZ: controlsTgtVec.z
+                tgtX: playerPosition.x,
+                tgtZ: playerPosition.z
             }, 1000)
 
             .onUpdate((tweenedObj) => {
@@ -125,31 +121,46 @@ const CameraOrbitController = () => {
 
                 controlsTgt2Vec.set(tweenedObj.tgtX, playerPosition.y, tweenedObj.tgtZ)
                 controls.target = controlsTgt2Vec
-                // controls.update()
+                controls.update()
 
             })
             .onComplete(() => resetTween())
             tween.start()
+
+            if (isDebugOverlayVisible) {
+
+            }
+
         }
     },[playerPosition, playerRotation])
 
 
+    /**
+     * Render the camera position & controls changes on every frame.
+     */
     useFrame((state, delta) => {
         if (tween) tween.update()
     })
 
 
+    /**
+     * Update camera variables at the stores if the camera changes.
+     * @param evt The camera object containing event details
+     */
     const onChange = (evt) =>{
         camera.getWorldDirection(cameraDirection)
         updateCameraDirection({
             x: cameraDirection.x,
-            // y: cameraDirection.y,
             y: 0,
             z: cameraDirection.z
         })
         updateCameraPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z })
     }
 
+
+    /**
+     * Resets the tween animations once they are done.
+     */
     const resetTween = () => {
         updateCameraControlsTarget({ x: controls.target.x, y: controls.target.y, z: controls.target.z})
         tween = null
