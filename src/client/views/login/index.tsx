@@ -12,11 +12,10 @@ const Login = () => {
   const username = useLoginStore((state) => state.username)
   const password = useLoginStore((state) => state.password)
   const serverAddress = useLoginStore((state) => state.serverAddress)
-  const socketComponent = useSocketStore((state) => state.socketComponent)
-  
   const updateUsername = useLoginStore((state) => state.updateUsername)
   const updatePassword = useLoginStore((state) => state.updatePassword)
   const updateServerAddress = useLoginStore((state) => state.updateServerAddress)
+  
   const updateSocketComponent = useSocketStore((state) => state.updateSocketComponent)
 
   const [reason, setReason] = useState<string>()

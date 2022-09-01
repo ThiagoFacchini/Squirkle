@@ -11,17 +11,17 @@ const CameraHelper = () => {
     const shouldRenderCameraTarget = () => {
         if (isDebugOverlayVisible) {
             return (
-                <meshStandardMaterial color={'white'} />
+                <mesh position={[ controlsTargetPosition.x, controlsTargetPosition.y, controlsTargetPosition.z]}>
+                    <sphereGeometry args={[.1, 12, 12]} />
+                    <meshStandardMaterial color={'white'} />
+                </mesh>                
             )
         }
+
+        return null
     }
     
-    return (
-        <mesh position={[ controlsTargetPosition.x, controlsTargetPosition.y, controlsTargetPosition.z - .05]}>
-            <sphereGeometry args={[.1, 12, 12]} />
-            { shouldRenderCameraTarget() }
-        </mesh>
-    )
+    return shouldRenderCameraTarget()
 }
 
 export default CameraHelper

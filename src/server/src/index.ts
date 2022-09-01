@@ -8,6 +8,9 @@ import Settings from './settings/settings'
 import Ticker from './modules/ticker'
 import CommandLine from './modules/commands'
 import Timer from './modules/Timer'
+import Authenticator from './modules/authenticator'
+
+import { SOCKET_EVENTS, AUTHENTICATOR_RERSPONSES } from './definitions/enums'
 
 
 // Server initialization
@@ -17,7 +20,7 @@ const server = http.createServer(app)
 
 const corsWhitelist = [
     'http://localhost:8080', 
-    'http://10.0.1.11:8080',
+    'http://10.0.1.11:8080', 
     'http://10.76.254.24:8080',
     'http://100.64.29.20:8080'
 ]
@@ -60,35 +63,45 @@ const io = new Server(server, {
 })
 
 
-io.on('connection', (socket) => {
-    console.log(`[SERVER]: User connect ${socket.id}`)
+io.on(SOCKET_EVENTS.CONNECTION, (socket) => {
+    console.log(`[SERVER]: User connected. Socket id: ${socket.id}`)
 
-    socket.emit('serverConfigs', {
-        socket: {
-            tickInterval: Settings.socket.tickInterval
-        }
+    /** Authenticate the client */
+    socket.on(SOCKET_EVENTS.AUTHENTICATE, (data) => {
+        console.log('hit')
+        const response = Authenticator.authenticate(data.username, data.password)
+        socket.emit(SOCKET_EVENTS.AUTHENTICATE, response)
     })
 
-    socket.on('client', (data) => {
-        console.log('Message received - topic: client - message:')
-        console.log(data)
-        console.log('emitting...')
-        socket.emit('dada', {
-            message: 'Server message'
+
+    /** Emits to the client server configurations */
+    socket.on(SOCKET_EVENTS.SERVER_CONFIGS, (data) => {
+        socket.emit(SOCKET_EVENTS.SERVER_CONFIGS, {
+            camera: {
+                cameraOffsetY: Settings.camera.offsetY,
+                cameraOffsetZ: Settings.camera.offsetZ
+            },
+            socket: {
+                tickInterval: Settings.socket.tickInterval,
+            },
+            player: {
+                walkSpeed: Settings.player.walkSpeed,
+                runSpeed: Settings.player.runSpeed,
+                rotateSpeed: Settings.player.rotateSpeed
+            }
         })
-        console.log('emitted')
-    })
-
-    socket.on('ping', () => {
-        socket.emit('pong', {})
     })
 
 
-    socket.on('commandLine', (data) => {
+    /** Process commands */
+    socket.on(SOCKET_EVENTS.COMMANDLINE, (data) => {
         CommandLine.process(data, socket.id)
     })
 
-    
+
+
+
+    /** Subscribing for the ticker service */
     Ticker.subscribe({ id: 'SocketIO', cb: (tickCount) => { 
         io.sockets.emit('tick', { message: tickCount })
     }})

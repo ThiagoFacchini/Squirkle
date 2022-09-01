@@ -8,4 +8,33 @@
   flex-direction: column;
   align-items: center;
   padding-top: 100px;
+
+  & .itemsContainer {
+    margin-top: 200px;
+    align-content: left;
+
+    & .item {
+      font-size: 25px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: row;
+
+      & .status {
+        width: 24px;
+        height: 24px;
+        background-color: gray;
+        margin-right: 10px;
+        border-radius: 12px;
+
+        &.green {
+          background-color: green;
+        }
+      }
+    }
+
+    & .label {
+      color: #999;
+    }
+  }
+
 }

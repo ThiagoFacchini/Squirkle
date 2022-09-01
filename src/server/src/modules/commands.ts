@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash'
-import { COMMANDS_RESPONSES, SENDER } from '../definitions/enums'
+import { COMMANDLINE_RESPONSES, COMMANDLINE_COMMANDS, SENDER } from '../definitions/enums'
 
 type ModulesType = {
     key: string,
@@ -37,7 +37,7 @@ const processCommand = (commandline: string, socketId: string) => {
     decodedCommand.splice(0, 1)
     let commandArgs = decodedCommand.join(' ')
 
-    if (command === '/help') {
+    if (command === `/${COMMANDLINE_COMMANDS.HELP}`) {
         isInvalid = false
 
         for (let i = 0; i < modules.length; i++) {
@@ -50,14 +50,14 @@ const processCommand = (commandline: string, socketId: string) => {
                 let message = `-- ${modules[i].commands[x]}`
 
                 commandsCallback({
-                    status: COMMANDS_RESPONSES.OK,
+                    status: COMMANDLINE_RESPONSES.OK,
                     message: message,
                     sender: SENDER.SERVER
                 }, socketId)
             }
 
             commandsCallback({
-                status: COMMANDS_RESPONSES.OK,
+                status: COMMANDLINE_RESPONSES.OK,
                 message: message,
                 sender: SENDER.SERVER
             }, socketId)
@@ -80,7 +80,7 @@ const processCommand = (commandline: string, socketId: string) => {
 
     if (isInvalid) {
         commandsCallback({
-            status: COMMANDS_RESPONSES.ERROR,
+            status: COMMANDLINE_RESPONSES.ERROR,
             message: `${command} is not a valid command.`,
             sender: SENDER.SERVER
         }, socketId)

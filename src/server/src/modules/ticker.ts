@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 import Settings from './../settings/settings'
-import { COMMANDS_RESPONSES, SENDER } from '../definitions/enums'
+import { COMMANDLINE_RESPONSES, COMMANDLINE_COMMANDS, SENDER } from '../definitions/enums'
 
 type SubscriptionType = {
     id: string
@@ -97,7 +97,7 @@ const commands = (commandArgs: string) => {
         const newTickCount = parseInt(decodedCommand[1])
         tickCount = newTickCount
         return { 
-            status: COMMANDS_RESPONSES.OK,
+            status: COMMANDLINE_RESPONSES.OK,
             message: `TickCount set to ${newTickCount}`,
             sender: SENDER.SERVER
         }
@@ -105,7 +105,7 @@ const commands = (commandArgs: string) => {
     } else if (command === 'stop') {
         tickerStop()
         return { 
-            status: COMMANDS_RESPONSES.OK,
+            status: COMMANDLINE_RESPONSES.OK,
             message: `Ticker stopped.`,
             sender: SENDER.SERVER
         }
@@ -113,21 +113,21 @@ const commands = (commandArgs: string) => {
     } else if (command === 'start') {
         tickerStart()
         return { 
-            status: COMMANDS_RESPONSES.OK,
+            status: COMMANDLINE_RESPONSES.OK,
             message: `Ticker started.`,
             sender: SENDER.SERVER
         }
 
-    } else if (command.toLowerCase() === 'help') {
+    } else if (command.toLowerCase() === COMMANDLINE_COMMANDS.HELP) {
         return {
-            status: COMMANDS_RESPONSES.OK,
+            status: COMMANDLINE_RESPONSES.OK,
             message: `----- set | stop | start`,
             sender: SENDER.SERVER
         }
 
     } else {
         return { 
-            status: COMMANDS_RESPONSES.ERROR,
+            status: COMMANDLINE_RESPONSES.ERROR,
             message: `command ${decodedCommand[0]} not recognised.`,
             sender: SENDER.SERVER
         }

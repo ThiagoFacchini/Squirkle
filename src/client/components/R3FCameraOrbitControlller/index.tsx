@@ -7,6 +7,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import useWindowsStore from './../../stores/windowsStore'
 import usePlayerStore from './../../stores/playerStore'
 import useCameraStore from './../../stores/cameraStore'
+import useConfigStore from './../../stores/configsStore'
 
 let controlsTgt2Vec = new THREE.Vector3()
 let positionVec = new THREE.Vector3()
@@ -21,10 +22,13 @@ const CameraOrbitController = () => {
 
     const playerPosition = usePlayerStore((state) => state.position)
     const playerRotation = usePlayerStore((state) => state.rotation)
+    const playerWalkSpeed = usePlayerStore((state) => state.walkSpeed)
 
     const updateCameraDirection = useCameraStore((state => state.updateDirection))
     const updateCameraPosition = useCameraStore((state) => state.updatePosition)
     const updateCameraControlsTarget = useCameraStore((state) => state.updateControlsTarget)
+    const configCameraOffsetY = useCameraStore((state) => state.cameraOffsetY)
+    const configCameraOffsetZ = useCameraStore((state) => state.cameraOffsetZ)
 
     const { camera, gl } = useThree()
 
@@ -39,23 +43,27 @@ const CameraOrbitController = () => {
             if (camera) {
                 camera.getWorldDirection(cameraDirection)
                 updateCameraDirection(cameraDirection)
-                updateCameraPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z })
             }
         }
     },[isInitialised])
 
     
     /**
-     * Create orbit controls, add a listener to monitor changes to it and set the target to the 
-     * player.
+     * Create orbit controls, add a listener to monitor camera changes, position the camera and set 
+     * its target to the player.
     */    
     useEffect(() => {
         controls = new OrbitControls(camera, gl.domElement)
         controls.addEventListener('change', onChange);
+        
+        const camPos = getCameraPosition()
+                
+        camera.position.x = camPos.x
+        camera.position.y = camPos.y + configCameraOffsetY
+        camera.position.z = camPos.z
 
-        camera.position.x = playerPosition.x
-        camera.position.y = playerPosition.y +3
-        camera.position.z = playerPosition.z +5
+        camera.updateProjectionMatrix()
+        updateCameraPosition({ x: camPos.x, y: camPos.y, z: camPos.z })
 
         controls.target = new THREE.Vector3(
             playerPosition.x,
@@ -63,7 +71,7 @@ const CameraOrbitController = () => {
             playerPosition.z
         )
         controls.update()
-        camera.updateProjectionMatrix()
+        updateCameraControlsTarget({x: controls.target.x, y: controls.target.y, z: controls.target.z})
 
         return () => {
             controls.dispose()
@@ -97,9 +105,7 @@ const CameraOrbitController = () => {
      */
     useEffect(() => {
         if (camera && isInitialised) {
-            positionVec.set(playerPosition.x, playerPosition.y, playerPosition.z)
-            directionVec.set(cameraDirection.x, cameraDirection.y, cameraDirection.z)
-            positionVec.addScaledVector(directionVec, -5)
+            const camPos = getCameraPosition()
             
             tween = new TWEEN.Tween({
                 posX: camera.position.x,
@@ -107,15 +113,14 @@ const CameraOrbitController = () => {
                 tgtX: controls.target.x,
                 tgtZ: controls.target.z
             }).to({
-                posX: positionVec.x, 
-                posZ: positionVec.z,
+                posX: camPos.x, 
+                posZ: camPos.z,
                 tgtX: playerPosition.x,
                 tgtZ: playerPosition.z
-            }, 1000)
+            }, playerWalkSpeed)
 
             .onUpdate((tweenedObj) => {
                 camera.position.x = tweenedObj.posX,
-                camera.position.y = camera.position.y
                 camera.position.z = tweenedObj.posZ
                 camera.updateProjectionMatrix()
 
@@ -125,7 +130,7 @@ const CameraOrbitController = () => {
 
             })
             .onComplete(() => resetTween())
-            tween.start()
+            .start()
 
             if (isDebugOverlayVisible) {
 
@@ -164,6 +169,16 @@ const CameraOrbitController = () => {
     const resetTween = () => {
         updateCameraControlsTarget({ x: controls.target.x, y: controls.target.y, z: controls.target.z})
         tween = null
+    }
+
+
+    /** Returns the camera position based on the player and configured camera offsets */
+    const getCameraPosition = (): THREE.Vector3 => {
+        positionVec.set(playerPosition.x, playerPosition.y, playerPosition.z)
+        directionVec.set(cameraDirection.x, cameraDirection.y, cameraDirection.z)        
+        positionVec.addScaledVector(directionVec, - configCameraOffsetZ)
+        
+        return positionVec
     }
 
     return null

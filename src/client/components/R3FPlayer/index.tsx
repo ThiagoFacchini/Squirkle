@@ -7,6 +7,7 @@ import TWEEN from '@tweenjs/tween.js'
 import useWindowsStore from '../../stores/windowsStore'
 import usePlayerStore from '../../stores/playerStore'
 import useCameraStore from '../../stores/cameraStore'
+import { StaticDrawUsage } from 'three'
 
 let positionTween, rotationTween
 let playerRotation = new THREE.Vector3()
@@ -15,6 +16,8 @@ const Player = () => {
     const isDebugOverlayVisible = useWindowsStore((state) => state.isDebugOverlayVisible)
 
     const playerPosition = usePlayerStore((state) => state.position)
+    const walkSpeed = usePlayerStore((state) => state.walkSpeed)
+    const rotateSpeed = usePlayerStore((state) => state.rotateSpeed)
     const updatePlayerRotation = usePlayerStore((state) => state.updateRotation)
 
     const cameraDirection = useCameraStore((state) => state.direction)
@@ -41,26 +44,43 @@ const Player = () => {
         if (meshRef.current && isInitialised) {
             const mesh = meshRef.current
 
-            let yRotation = Math.atan2( 
+            let yRotation = parseFloat(Math.atan2( 
                 (cameraPosition.x - meshRef.current.position.x),
                 (cameraPosition.z - meshRef.current.position.z)
-            )
+            ).toFixed(5))
 
-            rotationTween = new TWEEN.Tween({
-                y: mesh.rotation.y,
-            })
-            .to ({
-                y: yRotation
-            }, 200)
-            .onUpdate((tweenedObj) => {
-                mesh.rotation.set(
-                    mesh.rotation.x,
-                    tweenedObj.y,
-                    mesh.rotation.z
-                )
-            })
-            .onComplete(() => completedRotation())
-            .start()
+            let meshRotation = parseFloat(mesh.rotation.y.toFixed(5))
+            let rotationOffset = yRotation - meshRotation
+
+            /** Necessary for the player rotation to take the shortest path */
+            rotationOffset > Math.PI ? yRotation = yRotation - 2 * Math.PI : yRotation
+
+
+            if (yRotation !== 0 && (yRotation !== meshRotation)) {
+                rotationTween = new TWEEN.Tween({
+                    y: mesh.rotation.y,
+                })
+                .to ({
+                    y: yRotation
+                }, rotateSpeed)
+                .onUpdate((tweenedObj) => {
+                    mesh.rotation.set(
+                        mesh.rotation.x,
+                        tweenedObj.y,
+                        mesh.rotation.z
+                    )
+                })
+                .onComplete(() => {
+                    rotationTween = null
+                    mesh.rotation.set(mesh.rotation.x, yRotation, mesh.rotation.z)
+                    updatePlayerRotation({x: mesh.rotation.x, y: mesh.rotation.y, z: mesh.rotation.z})
+                    movePlayer(true)
+                })
+                .start()
+
+            } else {
+                movePlayer(false)
+            }
         }
     }, [playerPosition, meshRef])
 
@@ -71,10 +91,10 @@ const Player = () => {
     })
 
 
-    const completedRotation = () => {
-        rotationTween = null
-        
+    const movePlayer = (didRotate: boolean) => {
         if (meshRef.current) {
+            const combinedSpeed = walkSpeed - (didRotate ? rotateSpeed : 0)
+
             const mesh = meshRef.current
             mesh.getWorldDirection(playerRotation)
             updatePlayerRotation(playerRotation)
@@ -88,19 +108,18 @@ const Player = () => {
                 x: playerPosition.x,
                 y: playerPosition.y,
                 z: playerPosition.z
-            }, 800)
+            }, combinedSpeed)
             .onUpdate((tweenedObj) => {
                 mesh.position.x = tweenedObj.x
                 mesh.position.y = tweenedObj.y
                 mesh.position.z = tweenedObj.z
             })
-            .onComplete(() => resetPositionTween())
+            .onComplete(() => {
+                positionTween = null
+            })
             .start()
         }
-
     }
-
-    const resetPositionTween = () => positionTween = null
 
  
     return (

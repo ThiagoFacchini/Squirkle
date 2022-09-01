@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 
-import { COMMANDS_RESPONSES } from '../../../server/src/definitions/enums'
+import { COMMANDLINE_RESPONSES } from '../../../server/src/definitions/enums'
 import useMessagesStore from '../../stores/messageStore'
 import useCommandLineStore from '../../stores/commandLineStore'
 
@@ -80,7 +80,7 @@ const LastMessages = () => {
         for (let i = (messages.length -1); i >= 0; i--) {
             let messageStyle = classNames(styles.message)
 
-            if (messages[i].status == COMMANDS_RESPONSES.ERROR) {
+            if (messages[i].status == COMMANDLINE_RESPONSES.ERROR) {
                 messageStyle = classNames(styles.message, styles.error)
             }
 

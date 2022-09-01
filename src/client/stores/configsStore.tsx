@@ -12,12 +12,13 @@ interface ConfigsStoreType {
 // --------------------------------------------------------
 // Default Values
 // --------------------------------------------------------
-const DEFAULT_TICK_INTERVAL = 0
+const DEFAULT_TICK_INTERVAL = -1
+const DEFAULT_ARE_CONFIGURATIONS_LOADED = false
 // --------------------------------------------------------
 
 export const useConfigsStore = create<ConfigsStoreType>((set) => ({
   tickInterval: DEFAULT_TICK_INTERVAL,
-  updateTickInterval: (tickInterval) => set((state) => ({ tickInterval: tickInterval }))
+  updateTickInterval: (tickInterval) => set((state) => ({ tickInterval: tickInterval })),
 }))
 
 export default useConfigsStore

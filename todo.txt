@@ -1,8 +1,7 @@
 [CLIENT]
 - define camera offset
-- create server command line
 - fix player model size in relation to its positioning
-
+- handle authentication errors
+- when moving on the z axis, depending on the camera angle the player does a full rotation (unnecessary)
 [SERVER]
-- create command to set time
 - create a player basic stats / settings, e.g: speed
