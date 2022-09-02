@@ -10,6 +10,7 @@ const PlayerController = () => {
   const updatePlayerPosition = usePlayerStore((state) => state.updatePosition)
 
   const cameraDirection = useCameraStore((state) => state.direction)
+  const cameraPosition = useCameraStore((state) => state.position)
 
   const isCommandLineActive = useCommandLineStore((state) => state.isActive)
   
@@ -28,48 +29,64 @@ const PlayerController = () => {
 
 
   const onKeyDown = (evt: KeyboardEvent) => {
+    // Deals with Forward and Backward
     const positionVec = new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
-    const directionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+    const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+
+    const dotCameraDirProj = new THREE.Vector3(
+      cameraDirectionVec.dot(new THREE.Vector3(1,0,0)),
+      0,
+      cameraDirectionVec.dot(new THREE.Vector3(0,0,1))
+    )
+
+    // Normalize because the length of the vector is irrelevant
+    dotCameraDirProj.normalize()
+
+    
+    // Sideways
+    const cameraDirectionRight = new THREE.Vector3()
+    cameraDirectionRight.copy(cameraDirectionVec)
+
+    cameraDirectionRight.cross(new THREE.Vector3(0,1,0))
+
+    const dotCameraCrossProj = new THREE.Vector3(
+      cameraDirectionRight.dot(new THREE.Vector3(1, 0, 0)),
+      0,
+      cameraDirectionRight.dot(new THREE.Vector3(0, 0, 1)),
+    )
+
+    dotCameraCrossProj.normalize()
 
     if (isCommandLineActive) return
 
+    const totalTranslationVec = new THREE.Vector3()
+    
     switch (evt.key) {
       case 'w' || 'W':
-        positionVec.add(directionVec).multiplyScalar(1)
-
-        updatePlayerPosition({
-          x: positionVec.x,
-          y: positionVec.y,
-          z: positionVec.z
-        })
-        return
+        totalTranslationVec.add(dotCameraDirProj)
+        break
       
       case 's' || 'S':
-        positionVec.sub(directionVec).multiplyScalar(1)
+        totalTranslationVec.sub(dotCameraDirProj)
+        break
 
-        updatePlayerPosition({
-          x: positionVec.x,
-          y: positionVec.y,
-          z: positionVec.z
-        })
-        return
-
-      case 'a' || 'A':
-        updatePlayerPosition({
-          x: playerPosition.x -1,
-          y: playerPosition.y,
-          z: playerPosition.z
-        })
-        return
+      case 'a' || 'A':  
+      totalTranslationVec.sub(dotCameraCrossProj)
+        break
 
       case 'd' || 'D':
-        updatePlayerPosition({
-          x: playerPosition.x +1,
-          y: playerPosition.y,
-          z: playerPosition.z
-        })
-        return
+        totalTranslationVec.add(dotCameraCrossProj)
+        break
     }
+
+    totalTranslationVec.normalize()
+    positionVec.add(totalTranslationVec)
+    
+    updatePlayerPosition({
+      x: positionVec.x,
+      y: positionVec.y,
+      z: positionVec.z
+    })
   }
 
   const onKeyUp = (evt: KeyboardEvent) => {

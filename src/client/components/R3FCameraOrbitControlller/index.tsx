@@ -156,7 +156,7 @@ const CameraOrbitController = () => {
         camera.getWorldDirection(cameraDirection)
         updateCameraDirection({
             x: cameraDirection.x,
-            y: 0,
+            y: cameraDirection.y,
             z: cameraDirection.z
         })
         updateCameraPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z })

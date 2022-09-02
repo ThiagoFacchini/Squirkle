@@ -17,6 +17,7 @@ import PingWatcher from './../../components/pingWatcher'
 import MessageCentre from './../../components/messageCentre'
 
 import useSocket from './../../stores/socketStore'
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
 
 const Scene = () => {
     const navigate = useNavigate()

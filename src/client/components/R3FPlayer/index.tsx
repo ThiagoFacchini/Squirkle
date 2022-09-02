@@ -55,7 +55,6 @@ const Player = () => {
             /** Necessary for the player rotation to take the shortest path */
             rotationOffset > Math.PI ? yRotation = yRotation - 2 * Math.PI : yRotation
 
-
             if (yRotation !== 0 && (yRotation !== meshRotation)) {
                 rotationTween = new TWEEN.Tween({
                     y: mesh.rotation.y,
