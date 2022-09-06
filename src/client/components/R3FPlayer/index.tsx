@@ -7,7 +7,6 @@ import TWEEN from '@tweenjs/tween.js'
 import useWindowsStore from '../../stores/windowsStore'
 import usePlayerStore from '../../stores/playerStore'
 import useCameraStore from '../../stores/cameraStore'
-import { StaticDrawUsage } from 'three'
 
 let positionTween, rotationTween
 let playerRotation = new THREE.Vector3()
@@ -18,9 +17,10 @@ const Player = () => {
     const playerPosition = usePlayerStore((state) => state.position)
     const walkSpeed = usePlayerStore((state) => state.walkSpeed)
     const rotateSpeed = usePlayerStore((state) => state.rotateSpeed)
+    const isMoving = usePlayerStore((state) => state.isMoving)
     const updatePlayerRotation = usePlayerStore((state) => state.updateRotation)
+    const updateIsMoving = usePlayerStore((state) => state.updateIsMoving)
 
-    const cameraDirection = useCameraStore((state) => state.direction)
     const cameraPosition = useCameraStore((state) => state.position)
 
     const [isInitialised, setIsInitialised] = useState(false)
@@ -76,6 +76,8 @@ const Player = () => {
                     movePlayer(true)
                 })
                 .start()
+                 
+                updateIsMoving(true)
 
             } else {
                 movePlayer(false)
@@ -92,6 +94,7 @@ const Player = () => {
 
     const movePlayer = (didRotate: boolean) => {
         if (meshRef.current) {
+            if (!isMoving) updateIsMoving(true)
             const combinedSpeed = walkSpeed - (didRotate ? rotateSpeed : 0)
 
             const mesh = meshRef.current
@@ -115,6 +118,8 @@ const Player = () => {
             })
             .onComplete(() => {
                 positionTween = null
+                console.log('setting isMoving to false')
+                updateIsMoving(false)
             })
             .start()
         }
