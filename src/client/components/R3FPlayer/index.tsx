@@ -118,7 +118,8 @@ const Player = () => {
             })
             .onComplete(() => {
                 positionTween = null
-                console.log('setting isMoving to false')
+                console.log('Animation Complete!!!')
+                // console.log('setting isMoving to false')
                 updateIsMoving(false)
             })
             .start()

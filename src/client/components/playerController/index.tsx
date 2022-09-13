@@ -41,28 +41,62 @@ const PlayerController = () => {
   })
 
 
+  /**
+   * Moves the player FORWARD (W)
+   */
   useEffect(() => {
-    console.log(`isMoving ${isMoving}`)
-    console.log(`isWActive ${isWActive}`)
-
     if (!isMoving && isWActive) {
-      // console.log('moving')
-      const positionVec = new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
       const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
-
       const totalTranslationVec = new THREE.Vector3()
-      totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) )
 
-      totalTranslationVec.normalize()
-      positionVec.add(totalTranslationVec)
-      
-      updatePlayerPosition({
-        x: positionVec.x,
-        y: positionVec.y,
-        z: positionVec.z
-      })      
+      totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) ).normalize()
+      updatePosition(totalTranslationVec)
     }
   }, [isWActive, isMoving])
+
+
+  /**
+   * Moves the player BACKWARD (S)
+   */
+   useEffect(() => {
+    if (!isMoving && isSActive) {
+      const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
+      const totalTranslationVec = new THREE.Vector3()
+
+      totalTranslationVec.sub( getDotForwardVector(cameraDirectionVec) ).normalize()
+      updatePosition(totalTranslationVec)
+    }
+  }, [isSActive, isMoving])
+
+
+  /**
+   * Moves the player LEFTWARD (A)
+   */
+     useEffect(() => {
+      if (!isMoving && isAActive) {
+        const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
+        const totalTranslationVec = new THREE.Vector3()
+  
+        totalTranslationVec.sub( getDotCrossVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
+    }, [isAActive, isMoving])
+
+
+
+  /**
+   * Moves the player RIGHTWARD (D)
+   */
+   useEffect(() => {
+    if (!isMoving && isDActive) {
+      const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
+      const totalTranslationVec = new THREE.Vector3()
+
+      totalTranslationVec.add( getDotCrossVector(cameraDirectionVec) ).normalize()
+      updatePosition(totalTranslationVec)
+    }
+  }, [isDActive, isMoving])
+
 
   /**
    * 
@@ -103,47 +137,48 @@ const PlayerController = () => {
   }
 
 
-  const onKeyDown = (evt: KeyboardEvent) => {
-
-    // If the command line is active, then return
-    if (isCommandLineActive) return
-
+  /**
+   * Updates the player position in the Player Store
+   * @param translationVec Vector3 containing the position translation vector
+   */
+  const updatePosition = (translationVec: Vector3): void => {
     const positionVec = new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
-    const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+    positionVec.add(translationVec)
 
-    const totalTranslationVec = new THREE.Vector3()
-    
-    switch (evt.key) {
-      case 'w' || 'W':
-        if (!isWActive) setIsWActive(true)
-        // totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) )
-        console.log('ignoring')
-        break
-      
-      case 's' || 'S':
-        if (!isSActive) setIsSActive(true)
-        totalTranslationVec.sub( getDotForwardVector(cameraDirectionVec) )
-        break
-
-      case 'a' || 'A':  
-      if (!isAActive) setIsAActive(true)
-        totalTranslationVec.sub( getDotCrossVector(cameraDirectionVec) )
-        break
-
-      case 'd' || 'D':
-        if (!isDActive) setIsDActive(true)
-        totalTranslationVec.add( getDotCrossVector(cameraDirectionVec) )
-        break
-    }
-
-    totalTranslationVec.normalize()
-    positionVec.add(totalTranslationVec)
-    
     updatePlayerPosition({
       x: positionVec.x,
       y: positionVec.y,
       z: positionVec.z
     })
+  }
+
+
+  const onKeyDown = (evt: KeyboardEvent) => {
+
+    // If the command line is active, then return
+    if (isCommandLineActive) return
+
+    const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)
+    const totalTranslationVec = new THREE.Vector3()
+    
+    switch (evt.key) {
+      case 'w' || 'W':
+        if (!isWActive) setIsWActive(true)
+        break
+      
+      case 's' || 'S':
+        if (!isSActive) setIsSActive(true)
+        break
+
+      case 'a' || 'A':  
+        if (!isAActive) setIsAActive(true)
+        break
+
+
+      case 'd' || 'D':
+        if (!isDActive) setIsDActive(true)
+        break
+    }
   }
 
 
@@ -161,7 +196,7 @@ const PlayerController = () => {
         break
 
       case 'a' || 'A':  
-      if (isWActive) setIsAActive(false)
+      if (isAActive) setIsAActive(false)
         break
 
       case 'd' || 'D':
