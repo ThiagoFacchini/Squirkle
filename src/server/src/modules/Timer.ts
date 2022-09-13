@@ -24,16 +24,14 @@ const processTick = (tickCount: number) => {
 
     friendlyHours = hours < 10 ? `0${hours}` : hours
     friendlyMinutes = minutes < 10 ? `0${minutes}` : minutes
-
-    // console.log(`[MODULE:TIMER] - Time is ${friendlyHours}:${friendlyMinutes}.`)
 }
 
 const commands = (commandArgs: string) => {
     const decodedCommand = commandArgs.split(" ")
-    const command = decodedCommand[0].toLowerCase()
-    console.log(`command is ${command}`)
+    const command = decodedCommand[0]
+
     if (command === 'set') {
-        switch (decodedCommand[1].toLowerCase()) {
+        switch (decodedCommand[1]) {
             case 'day':
                 setTimeCb(dayTicks)
                 console.log('[MODULE:TIMER]: Time set to day.')
@@ -78,14 +76,14 @@ const commands = (commandArgs: string) => {
                 }
         }
 
-    } else if (command.toLowerCase() === 'get') {
+    } else if (command === 'get') {
         return { 
             status: COMMANDLINE_RESPONSES.OK,
             message: `It is ${friendlyHours}:${friendlyMinutes}.`,
             sender: SENDER.SERVER
         }
 
-    } else if (command.toLowerCase() === COMMANDLINE_COMMANDS.HELP) {
+    } else if (command === COMMANDLINE_COMMANDS.HELP) {
         return {
             status: COMMANDLINE_RESPONSES.OK,
             message: `----- get | set`,

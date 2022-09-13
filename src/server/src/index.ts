@@ -37,7 +37,7 @@ Timer.setTime(Ticker.set)
 
 // Registering Commands
 CommandLine.registerCommandResponse((response, socketId) => {
-    io.to(socketId).emit('commandLine', response)
+    io.to(socketId).emit(SOCKET_EVENTS.COMMANDLINE, response)
 })
 
 CommandLine.register(Timer.commands, 'Timer', ['/time'])
@@ -68,7 +68,6 @@ io.on(SOCKET_EVENTS.CONNECTION, (socket) => {
 
     /** Authenticate the client */
     socket.on(SOCKET_EVENTS.AUTHENTICATE, (data) => {
-        console.log('hit')
         const response = Authenticator.authenticate(data.username, data.password)
         socket.emit(SOCKET_EVENTS.AUTHENTICATE, response)
     })
@@ -103,7 +102,7 @@ io.on(SOCKET_EVENTS.CONNECTION, (socket) => {
 
     /** Subscribing for the ticker service */
     Ticker.subscribe({ id: 'SocketIO', cb: (tickCount) => { 
-        io.sockets.emit('tick', { message: tickCount })
+        io.sockets.emit(SOCKET_EVENTS.TICK, { message: tickCount })
     }})
 
 })

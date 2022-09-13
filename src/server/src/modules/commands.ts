@@ -31,8 +31,8 @@ const unregister = (i: number) => {
 
 const processCommand = (commandline: string, socketId: string) => {
     let isInvalid = true
-    let decodedCommand = commandline.split(" ")
-    const command = decodedCommand[0].toLowerCase()
+    let decodedCommand = commandline.toLowerCase().split(" ")
+    const command = decodedCommand[0]
 
     decodedCommand.splice(0, 1)
     let commandArgs = decodedCommand.join(' ')

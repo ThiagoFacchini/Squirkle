@@ -91,7 +91,7 @@ const tickerSet = (newTickCount: number) => {
 
 const commands = (commandArgs: string) => {
     const decodedCommand = commandArgs.split(" ")
-    const command = decodedCommand[0].toLowerCase()
+    const command = decodedCommand[0]
 
     if (command === 'set') {
         const newTickCount = parseInt(decodedCommand[1])
@@ -118,7 +118,7 @@ const commands = (commandArgs: string) => {
             sender: SENDER.SERVER
         }
 
-    } else if (command.toLowerCase() === COMMANDLINE_COMMANDS.HELP) {
+    } else if (command === COMMANDLINE_COMMANDS.HELP) {
         return {
             status: COMMANDLINE_RESPONSES.OK,
             message: `----- set | stop | start`,

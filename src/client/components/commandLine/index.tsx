@@ -3,6 +3,7 @@ import styles from './styles.module.css'
 
 import useCommandLineStore from '../../stores/commandLineStore'
 import useSocketStore from '../../stores/socketStore'
+import { SOCKET_EVENTS } from './../../../server/src/definitions/enums'
 
 const CommandLine = () => {
     const socketComponent = useSocketStore((state) => state.socketComponent)
@@ -24,6 +25,7 @@ const CommandLine = () => {
     const onKeyDown = (evt: KeyboardEvent) => {
         switch (evt.key) {
             case 'Enter':
+                console.log(`is commandline active ${isActive}`)
                 if (isActive) {
                     sendCommand()
                     document.getElementById('commandLine')?.blur()
@@ -39,7 +41,7 @@ const CommandLine = () => {
 
 
     const sendCommand = () => {
-        socketComponent.emit('commandLine', commandLineRef.current?.value)
+        socketComponent.emit(SOCKET_EVENTS.COMMANDLINE, commandLineRef.current?.value)
     }
 
 
