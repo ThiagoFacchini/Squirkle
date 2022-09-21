@@ -40,62 +40,70 @@ const PlayerController = () => {
     }
   })
 
-
-  /**
-   * Moves the player FORWARD (W)
-   */
+/**
+ * Movement Effect, allows the following directions:
+ * North, NorthEast, East, SouthEast, South, SouthWest, West, Northwest
+ */
   useEffect(() => {
-    if (!isMoving && isWActive) {
+    if (!isMoving) {
       const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
       const totalTranslationVec = new THREE.Vector3()
 
-      totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) ).normalize()
-      updatePosition(totalTranslationVec)
-    }
-  }, [isWActive, isMoving])
+      // Move NORTH
+      if (isWActive && !isAActive && !isSActive && !isDActive) {
+        totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
 
+      // Move NORTHEAST
+      if (isWActive && !isAActive && !isSActive && isDActive) {
+        totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) ).normalize()
+        totalTranslationVec.add( getDotCrossVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
 
-  /**
-   * Moves the player BACKWARD (S)
-   */
-   useEffect(() => {
-    if (!isMoving && isSActive) {
-      const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
-      const totalTranslationVec = new THREE.Vector3()
+      // Move EAST
+      if (!isWActive && !isAActive && !isSActive && isDActive) {
+        totalTranslationVec.add( getDotCrossVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
 
-      totalTranslationVec.sub( getDotForwardVector(cameraDirectionVec) ).normalize()
-      updatePosition(totalTranslationVec)
-    }
-  }, [isSActive, isMoving])
+      // Move SOUTHEAST
+      if (!isWActive && !isAActive && isSActive && isDActive) {
+        totalTranslationVec.sub( getDotForwardVector(cameraDirectionVec) ).normalize()
+        totalTranslationVec.add( getDotCrossVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
 
+      // Move SOUTH
+      if (!isWActive && !isAActive && isSActive && !isDActive) {
+        totalTranslationVec.sub( getDotForwardVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
 
-  /**
-   * Moves the player LEFTWARD (A)
-   */
-     useEffect(() => {
-      if (!isMoving && isAActive) {
-        const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
-        const totalTranslationVec = new THREE.Vector3()
-  
+      // Move SOUTHWEST
+      if (!isWActive && isAActive && isSActive && !isDActive) {
+        totalTranslationVec.sub( getDotCrossVector(cameraDirectionVec) ).normalize()
+        totalTranslationVec.sub( getDotForwardVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
+
+      // Move WEST
+      if (!isWActive && isAActive && !isSActive && !isDActive) {
         totalTranslationVec.sub( getDotCrossVector(cameraDirectionVec) ).normalize()
         updatePosition(totalTranslationVec)
       }
-    }, [isAActive, isMoving])
 
-
-
-  /**
-   * Moves the player RIGHTWARD (D)
-   */
-   useEffect(() => {
-    if (!isMoving && isDActive) {
-      const cameraDirectionVec = new THREE.Vector3(cameraDirection.x, cameraDirection.y, cameraDirection.z)      
-      const totalTranslationVec = new THREE.Vector3()
-
-      totalTranslationVec.add( getDotCrossVector(cameraDirectionVec) ).normalize()
-      updatePosition(totalTranslationVec)
+      // Move NORTHWEST
+      if (isWActive && isAActive && !isSActive && !isDActive) {
+        totalTranslationVec.add( getDotForwardVector(cameraDirectionVec) ).normalize()
+        totalTranslationVec.sub( getDotCrossVector(cameraDirectionVec) ).normalize()
+        updatePosition(totalTranslationVec)
+      }
     }
-  }, [isDActive, isMoving])
+
+  }, [isWActive, isAActive, isSActive, isDActive, isMoving])
+
 
 
   /**

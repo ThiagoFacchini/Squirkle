@@ -3,11 +3,13 @@ import * as THREE from 'three'
 import { useThree, useFrame } from '@react-three/fiber'
 import TWEEN from '@tweenjs/tween.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { throttle } from 'lodash'
 
 import useWindowsStore from './../../stores/windowsStore'
 import usePlayerStore from './../../stores/playerStore'
 import useCameraStore from './../../stores/cameraStore'
 import useConfigStore from './../../stores/configsStore'
+import { useCamera } from '@react-three/drei'
 
 let controlsTgt2Vec = new THREE.Vector3()
 let positionVec = new THREE.Vector3()
@@ -23,12 +25,14 @@ const CameraOrbitController = () => {
     const playerPosition = usePlayerStore((state) => state.position)
     const playerRotation = usePlayerStore((state) => state.rotation)
     const playerWalkSpeed = usePlayerStore((state) => state.walkSpeed)
+    const playerIsMoving = usePlayerStore((state) => state.isMoving)
 
     const updateCameraDirection = useCameraStore((state => state.updateDirection))
     const updateCameraPosition = useCameraStore((state) => state.updatePosition)
     const updateCameraControlsTarget = useCameraStore((state) => state.updateControlsTarget)
     const configCameraOffsetY = useCameraStore((state) => state.cameraOffsetY)
     const configCameraOffsetZ = useCameraStore((state) => state.cameraOffsetZ)
+    const cameraStoreMaxUpdatesPerSecond = useCameraStore((state) => state.storeMaxUpdatesPerSecond)
 
     const { camera, gl } = useThree()
 
@@ -84,60 +88,47 @@ const CameraOrbitController = () => {
      * Change the orbit controls properties if it is in debug mode to give debug freem to the 
      * camera.
      */
-    // useEffect(() => {
-    //     if (isDebugOverlayVisible) {
-    //         controls.enablePan = true
-    //         controls.maxDistance = 30
-    //         controls.minDistance = 1
-    //     } else {
-    //         controls.enablePan = false
-    //         controls.maxDistance = 5.83
-    //         controls.minDistance = 1            
-    //         controls.minPolarAngle = 0
-    //         controls.maxPolarAngle = 1.5
-    //     }
-    //     controls.update()
-    // },[isDebugOverlayVisible])
+    useEffect(() => {
+        if (isDebugOverlayVisible) {
+            controls.enablePan = true
+            controls.maxDistance = 8
+            controls.minDistance = 0
+            controls.maxPolarAngle = 4
+        } else {
+            controls.enablePan = false
+            controls.maxDistance = 5.83
+            controls.minDistance = 2            
+            controls.maxPolarAngle = 1.5
+        }
+        controls.update()
+    },[isDebugOverlayVisible])
 
 
     /**
-     * Updates the camera position & controls target once the player moves.
+     * Updates the camera controls once the player moves.
      */
     useEffect(() => {
         if (camera && isInitialised) {
-            const camPos = getCameraPosition()
-            
-            tween = new TWEEN.Tween({
-                posX: camera.position.x,
-                posZ: camera.position.z,
-                tgtX: controls.target.x,
-                tgtZ: controls.target.z
-            }).to({
-                posX: camPos.x, 
-                posZ: camPos.z,
-                tgtX: playerPosition.x,
-                tgtZ: playerPosition.z
-            }, playerWalkSpeed)
-
-            .onUpdate((tweenedObj) => {
-                camera.position.x = tweenedObj.posX,
-                camera.position.z = tweenedObj.posZ
-                camera.updateProjectionMatrix()
-
-                controlsTgt2Vec.set(tweenedObj.tgtX, playerPosition.y, tweenedObj.tgtZ)
-                controls.target = controlsTgt2Vec
-                controls.update()
-
-            })
-            .onComplete(() => resetTween())
-            .start()
-
-            if (isDebugOverlayVisible) {
-
+            if (!playerIsMoving) {
+                tween = new TWEEN.Tween({
+                    tgtX: controls.target.x,
+                    tgtY: controls.target.y,
+                    tgtZ: controls.target.z
+                }).to({
+                    tgtX: playerPosition.x,
+                    tgtY: playerPosition.y,
+                    tgtZ: playerPosition.z
+                }, playerWalkSpeed)
+                .onUpdate((tweenedObj) => {
+                    controlsTgt2Vec.set(tweenedObj.tgtX, tweenedObj.tgtY, tweenedObj.tgtZ)
+                    controls.target = controlsTgt2Vec
+                    controls.update()
+                })
+                .onComplete(() => resetTween())
+                .start()
             }
-
         }
-    },[playerPosition, playerRotation])
+    },[playerPosition, playerIsMoving])
 
 
     /**
@@ -149,17 +140,13 @@ const CameraOrbitController = () => {
 
 
     /**
-     * Update camera variables at the stores if the camera changes.
+     * Update camera position and lookAtDirection at the store if the camera changes.
      * @param evt The camera object containing event details
      */
     const onChange = (evt) =>{
         camera.getWorldDirection(cameraDirection)
-        updateCameraDirection({
-            x: cameraDirection.x,
-            y: cameraDirection.y,
-            z: cameraDirection.z
-        })
-        updateCameraPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z })
+        throttledUpdateCameraDirection()
+        throttledUpdateCameraPosition()
     }
 
 
@@ -170,6 +157,28 @@ const CameraOrbitController = () => {
         updateCameraControlsTarget({ x: controls.target.x, y: controls.target.y, z: controls.target.z})
         tween = null
     }
+
+
+    /**
+     * Throttles the amount of calls to the updateCameraPosition (CameraStore) method.
+     */
+    const throttledUpdateCameraPosition = throttle(
+        () => {updateCameraPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z })},
+        1000 / cameraStoreMaxUpdatesPerSecond
+    )
+
+
+    /**
+     * Throttles the amount of calls to the updateCameraDirection (CameraStore) method.
+     */
+    const throttledUpdateCameraDirection = throttle(
+        () => { updateCameraDirection({ 
+            x: cameraDirection.x,
+            y: cameraDirection.y,
+            z: cameraDirection.z
+        }) },
+        1000 / cameraStoreMaxUpdatesPerSecond
+    )
 
 
     /** Returns the camera position based on the player and configured camera offsets */

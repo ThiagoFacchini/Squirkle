@@ -14,6 +14,7 @@ interface CameraStoreType {
   updateControlsTarget: (position: V3Type) => void,
   updateCameraOffsetZ: (cameraOffsetZ: number) => void,
   updateCameraOffsetY: (cameraOffsetY: number) => void,
+  storeMaxUpdatesPerSecond: number
 }
 
 type V3Type = {
@@ -32,6 +33,7 @@ const DEFAULT_CAMERA_DIRECTION = { x:0, y:1, z:0 }
 const DEFAULT_CONTROLS_TARGET = { x:0, y:0, z:0 }
 const DEFAULT_CAMERA_OFFSET_Z = -1
 const DEFAULT_CAMERA_OFFSET_Y = -1
+const DEFAULT_STORE_MAX_UPDATES_PER_SECOND = 10
 // --------------------------------------------------------
 
 
@@ -46,6 +48,7 @@ export const useCameraStore = create<CameraStoreType>((set) => ({
   updateControlsTarget: (position) => set((state) => ({ controlsTarget: position })),
   updateCameraOffsetY: (cameraOffsetY) => set((state) => ({ cameraOffsetY: cameraOffsetY })),
   updateCameraOffsetZ: (cameraOffsetZ) => set((state) => ({ cameraOffsetZ: cameraOffsetZ })),
+  storeMaxUpdatesPerSecond: DEFAULT_STORE_MAX_UPDATES_PER_SECOND
 }))
 
 export default useCameraStore
