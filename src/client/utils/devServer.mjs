@@ -23,15 +23,14 @@ esBuildDevServer.start(
         minify: false,
         sourcemap: true,
         incremental: true,
-        // format: 'esm',
         platform: 'browser',
         target: ['chrome58', 'safari11'],
         loader: { 
-            '.png': "dataurl", 
-            '.hdr': 'dataurl', 
-            '.jpg': 'dataurl',
-            '.otf': 'dataurl',
-            '.ttf': 'dataurl'
+            '.png': "file", 
+            '.hdr': 'file', 
+            '.jpg': 'file',
+            '.otf': 'file',
+            '.ttf': 'file'
         },
         plugins: [
             stylePlugin({
@@ -44,14 +43,13 @@ esBuildDevServer.start(
                 }
             }),
             copyFilePlugin({
-                source: ['../../public/client/reset.css'],
-                target: ['../../public/client/dist'],
+                source: ['utils/reset.css'],
+                target: ['../../public/client/static'],
                 copyWithFolder: false
             }),
             svgPlugin()
         ],
-        outdir: '../../public/client/dist'
-        // external: ["three/examples/jsm/controls/OrbitControls"]
+        outdir: '../../public/client/static'
     }),
     // To run the dev server a permission change is necessary:
     // chmod u+x node_modules/esbuild-dev-server-darwin-x64/devserver
